@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using IdentityServer4;
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 
 namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
 {
@@ -8,18 +6,15 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
     {
         // ApiResources define the apis in your system
         public static IEnumerable<ApiResource> GetApis()
-        {
+        {            
             return new List<ApiResource>
             {
                 new ApiResource("orders", "Orders Service"),
                 new ApiResource("basket", "Basket Service"),
-                new ApiResource("marketing", "Marketing Service"),
-                new ApiResource("locations", "Locations Service"),
                 new ApiResource("mobileshoppingagg", "Mobile Shopping Aggregator"),
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
                 new ApiResource("webhooks", "Webhooks registration Service"),
-                new ApiResource("coupon", "Coupon Service"),
             };
         }
 
@@ -46,22 +41,19 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     ClientName = "eShop SPA OpenId Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
-                    RedirectUris =           { $"{clientsUrl["Spa"]}/", "http://localhost:5104/" },
+                    RedirectUris =           { $"{clientsUrl["Spa"]}/" },
                     RequireConsent = false,
-                    PostLogoutRedirectUris = { $"{clientsUrl["Spa"]}/", "http://localhost:5104/" },
-                    AllowedCorsOrigins =     { $"{clientsUrl["Spa"]}", "http://localhost:5104" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["Spa"]}/" },
+                    AllowedCorsOrigins =     { $"{clientsUrl["Spa"]}" },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
                         "orders.signalrhub",
-                        "webhooks",
-                        "coupon"
+                        "webhooks"
                     },
                 },
                 new Client
@@ -71,7 +63,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     AllowedGrantTypes = GrantTypes.Hybrid,                    
                     //Used to retrieve the access token on the back channel.
                     ClientSecrets =
-                    {
+                    {                        
                         new Secret("secret".Sha256())
                     },
                     RedirectUris = { clientsUrl["Xamarin"] },
@@ -86,11 +78,8 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "mobileshoppingagg",
-                        "webhooks",
-                        "coupon"
+                        "webhooks"
                     },
                     //Allow requesting refresh tokens for long lived API access
                     AllowOfflineAccess = true,
@@ -102,6 +91,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     ClientName = "MVC Client",
                     ClientSecrets = new List<Secret>
                     {
+                        
                         new Secret("secret".Sha256())
                     },
                     ClientUri = $"{clientsUrl["Mvc"]}",                             // public uri of the client
@@ -125,12 +115,9 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
                         "orders.signalrhub",
-                        "webhooks",
-                        "coupon"
+                        "webhooks"
                     },
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
@@ -195,42 +182,9 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
-                        "webhooks",
-                        "coupon"
+                        "webhooks"
                     },
-                },
-                new Client
-                {
-                    ClientId = "locationsswaggerui",
-                    ClientName = "Locations Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["LocationsApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["LocationsApi"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "locations"
-                    }
-                },
-                new Client
-                {
-                    ClientId = "marketingswaggerui",
-                    ClientName = "Marketing Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["MarketingApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["MarketingApi"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "marketing"
-                    }
                 },
                 new Client
                 {
@@ -306,35 +260,6 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     AllowedScopes =
                     {
                         "webhooks"
-                    }
-                },
-                new Client
-                {
-                    ClientId = "couponswaggerui",
-                    ClientName = "Coupon Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["CouponApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["CouponApi"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "coupon"
-                    }
-                },
-                new Client
-                {
-                    ClientId = "couponapi",
-                    ClientName = "Coupon API",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,                    
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("secret".Sha256())
-                    },                    
-                    AllowedScopes =
-                    {
-                        "coupon"
                     }
                 }
             };
