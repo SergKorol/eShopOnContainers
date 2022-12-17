@@ -1,4 +1,8 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Extensions
 {
     public static class LinqSelectExtensions
     {

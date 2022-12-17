@@ -2,12 +2,11 @@
   "profiles": {
     "Payment.API": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "api/values",
+      "applicationUrl": "http://localhost:3331",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:3331"
+      }
     }
   }
 }

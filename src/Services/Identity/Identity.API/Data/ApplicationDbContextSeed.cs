@@ -1,12 +1,28 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Data
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.eShopOnContainers.Services.Identity.API.Extensions;
+using Microsoft.eShopOnContainers.Services.Identity.API.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Data
 {
-    using Microsoft.Extensions.Logging;
+
+
     public class ApplicationDbContextSeed
     {
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        public async Task SeedAsync(ApplicationDbContext context, IWebHostEnvironment env,
-            ILogger<ApplicationDbContextSeed> logger, IOptions<AppSettings> settings, int? retry = 0)
+        public async Task SeedAsync(ApplicationDbContext context,IWebHostEnvironment env,
+            ILogger<ApplicationDbContextSeed> logger, IOptions<AppSettings> settings,int? retry = 0)
         {
             int retryForAvaiability = retry.Value;
 
@@ -35,10 +51,10 @@
                 if (retryForAvaiability < 10)
                 {
                     retryForAvaiability++;
-
+                    
                     logger.LogError(ex, "EXCEPTION ERROR while migrating {DbContextName}", nameof(ApplicationDbContext));
 
-                    await SeedAsync(context, env, logger, settings, retryForAvaiability);
+                    await SeedAsync(context,env,logger,settings, retryForAvaiability);
                 }
             }
         }
@@ -72,7 +88,7 @@
 
             List<ApplicationUser> users = File.ReadAllLines(csvFileUsers)
                         .Skip(1) // skip header column
-                        .Select(row => Regex.Split(row, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
+                        .Select(row => Regex.Split(row, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)") )
                         .SelectTry(column => CreateApplicationUser(column, csvheaders))
                         .OnCaughtException(ex => { logger.LogError(ex, "EXCEPTION ERROR: {Message}", ex.Message); return null; })
                         .Where(x => x != null)
@@ -134,7 +150,7 @@
                 City = "Redmond",
                 Country = "U.S.",
                 Email = "demouser@microsoft.com",
-                Expiration = "12/25",
+                Expiration = "12/30",
                 Id = Guid.NewGuid().ToString(),
                 LastName = "DemoLastName",
                 Name = "DemoUser",
@@ -191,21 +207,23 @@
                 string imagePath = Path.Combine(webroot, "images");
                 string[] imageFiles = Directory.GetFiles(imagePath).Select(file => Path.GetFileName(file)).ToArray();
 
-                using ZipArchive zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read);
-                foreach (ZipArchiveEntry entry in zip.Entries)
+                using (ZipArchive zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read))
                 {
-                    if (imageFiles.Contains(entry.Name))
+                    foreach (ZipArchiveEntry entry in zip.Entries)
                     {
-                        string destinationFilename = Path.Combine(imagePath, entry.Name);
-                        if (File.Exists(destinationFilename))
+                        if (imageFiles.Contains(entry.Name))
                         {
-                            File.Delete(destinationFilename);
+                            string destinationFilename = Path.Combine(imagePath, entry.Name);
+                            if (File.Exists(destinationFilename))
+                            {
+                                File.Delete(destinationFilename);
+                            }
+                            entry.ExtractToFile(destinationFilename);
                         }
-                        entry.ExtractToFile(destinationFilename);
-                    }
-                    else
-                    {
-                        logger.LogWarning("Skipped file '{FileName}' in zipfile '{ZipFileName}'", entry.Name, imagesZipFile);
+                        else
+                        {
+                            logger.LogWarning("Skipped file '{FileName}' in zipfile '{ZipFileName}'", entry.Name, imagesZipFile);
+                        }
                     }
                 }
             }

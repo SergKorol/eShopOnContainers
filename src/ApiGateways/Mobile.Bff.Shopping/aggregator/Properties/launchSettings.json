@@ -2,19 +2,15 @@
   "profiles": {
     "PurchaseForMvc": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "api/values",
+      "applicationUrl": "http://localhost:61632/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:61632/"
+      }
     },
     "Azure Dev Spaces": {
       "commandName": "AzureDevSpaces",
-      "launchBrowser": false,
-      "resourceGroup": "eshoptestedu",
-      "aksName": "eshoptestedu",
-      "subscriptionId": "e3035ac1-c06c-4daf-8939-57b3c5f1f759"
+      "environmentVariables": {}
     }
   }
 }

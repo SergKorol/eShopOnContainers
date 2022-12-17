@@ -1,22 +1,25 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Services
+﻿using System.Text.RegularExpressions;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Services
 {
     public class RedirectService : IRedirectService
     {
         public string ExtractRedirectUriFromReturnUrl(string url)
         {
+            var result = "";
             var decodedUrl = System.Net.WebUtility.HtmlDecode(url);
             var results = Regex.Split(decodedUrl, "redirect_uri=");
             if (results.Length < 2)
                 return "";
 
-            string result = results[1];
+            result = results[1];
 
-            string splitKey;
+            var splitKey = "";
             if (result.Contains("signin-oidc"))
                 splitKey = "signin-oidc";
             else
                 splitKey = "scope";
-
+            
             results = Regex.Split(result, splitKey);
             if (results.Length < 2)
                 return "";

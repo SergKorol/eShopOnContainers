@@ -49,22 +49,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - SpaClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5104
-      - XamarinCallback=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105/xamarincallback
-      - ConnectionString=${ESHOP_AZURE_IDENTITY_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Service.IdentityDb;User Id=sa;Password=Pass@word;TrustServerCertificate=true}
-      - MvcClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5100
+      - ConnectionString=${ESHOP_AZURE_IDENTITY_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Service.IdentityDb;User Id=sa;Password=Pass@word}
+      - MarketingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5110
       - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
-      - MobileShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5120
       - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
-      - WebhooksApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5113
-      - WebhooksWebClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5114
+      - CouponApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5106
       - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
       - "5105:80"
-    labels:
-      kompose.service.type: LoadBalancer
       
   basket-api:
     environment:
@@ -112,6 +107,28 @@ services:
       - "9101:81"
     labels:
       kompose.service.type: LoadBalancer
+      
+  coupon-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${ESHOP_AZURE_COUPON_DB:-mongodb://nosqldata}
+      - identityUrl=http://identity-api
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - CheckUpdateTime=30000
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - UseLoadTest=${USE_LOADTEST:-False}
+      - Serilog__MinimumLevel__Override__Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ=Verbose
+      - Serilog__MinimumLevel__Override__coupon-api=Verbose
+      - PATH_BASE=/coupon-api
+    ports:
+      - "5106:80"
     
   ordering-api:
     environment:

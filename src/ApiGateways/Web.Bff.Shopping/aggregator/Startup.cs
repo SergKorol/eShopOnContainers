@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator;
+﻿using Newtonsoft.Json.Converters;
+
+namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator;
 
 public class Startup
 {
@@ -105,12 +107,10 @@ public static class ServiceCollectionExtensions
         services.Configure<UrlsConfig>(configuration.GetSection("urls"));
 
         services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
         services.AddSwaggerGen(options =>
         {
-            options.DescribeAllEnumsAsStrings();
-
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "Shopping Aggregator for Web Clients",
@@ -138,15 +138,16 @@ public static class ServiceCollectionExtensions
 
             options.OperationFilter<AuthorizeCheckOperationFilter>();
         });
+        services.AddSwaggerGenNewtonsoftSupport();
 
         services.AddCors(options =>
         {
             options.AddPolicy("CorsPolicy",
                 builder => builder
-                .SetIsOriginAllowed((host) => true)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
         });
 
         return services;

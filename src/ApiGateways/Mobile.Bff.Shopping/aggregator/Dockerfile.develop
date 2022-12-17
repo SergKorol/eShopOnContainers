@@ -11,7 +11,7 @@ COPY ["src/NuGet.config", "src/NuGet.config"]
 
 RUN dotnet restore src/ApiGateways/Mobile.Bff.Shopping/aggregator/Mobile.Shopping.HttpAggregator.csproj -nowarn:msb3202,nu1503
 COPY . .
-WORKDIR "/src/src/ApiGateways/Mobile.Bff.Shopping/aggregator"
+WORKDIR "/src/ApiGateways/Mobile.Bff.Shopping/aggregator"
 RUN dotnet build -c $BUILD_CONFIGURATION
 
 CMD ["dotnet", "run", "--no-build", "--no-launch-profile", "-c", "$BUILD_CONFIGURATION", "--"]]

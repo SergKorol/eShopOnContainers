@@ -1,6 +1,8 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Models.AccountViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Models.AccountViewModels
 {
-    public record LoginViewModel
+    public class LoginViewModel
     {
         [Required]
         [EmailAddress]

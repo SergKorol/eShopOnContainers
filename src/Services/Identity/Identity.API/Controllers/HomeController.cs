@@ -1,4 +1,12 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
+﻿
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.eShopOnContainers.Services.Identity.API.Models;
+using Microsoft.eShopOnContainers.Services.Identity.API.Services;
+using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
 {
     public class HomeController : Controller
     {
@@ -6,7 +14,7 @@
         private readonly IOptionsSnapshot<AppSettings> _settings;
         private readonly IRedirectService _redirectSvc;
 
-        public HomeController(IIdentityServerInteractionService interaction, IOptionsSnapshot<AppSettings> settings, IRedirectService redirectSvc)
+        public HomeController(IIdentityServerInteractionService interaction, IOptionsSnapshot<AppSettings> settings,IRedirectService redirectSvc)
         {
             _interaction = interaction;
             _settings = settings;

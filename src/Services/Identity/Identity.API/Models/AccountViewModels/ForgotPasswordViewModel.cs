@@ -1,9 +1,11 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Models.AccountViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Models.AccountViewModels
 {
-    public record ForgotPasswordViewModel
+    public class ForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]
-        public string Email { get; init; }
+        public string Email { get; set; }
     }
 }

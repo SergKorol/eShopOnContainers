@@ -1,4 +1,10 @@
-﻿namespace Identity.API.Factories
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.eShopOnContainers.Services.Identity.API.Data;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+
+namespace Identity.API.Factories
 {
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
