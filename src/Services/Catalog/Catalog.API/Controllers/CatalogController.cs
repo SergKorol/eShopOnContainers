@@ -128,6 +128,8 @@ public class CatalogController : ControllerBase
 
         return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, totalItems, itemsOnPage);
     }
+    
+    
 
     // GET api/v1/[controller]/items/type/1/brand[?pageSize=3&pageIndex=10]
     [HttpGet]
@@ -238,7 +240,8 @@ public class CatalogController : ControllerBase
             await _catalogContext.SaveChangesAsync();
         }
 
-        return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
+        var actionName = nameof(ItemByIdAsync);
+        return CreatedAtAction(actionName, new { id = productToUpdate.Id }, null);
     }
 
     //POST api/v1/[controller]/items
@@ -260,8 +263,8 @@ public class CatalogController : ControllerBase
         _catalogContext.CatalogItems.Add(item);
 
         await _catalogContext.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(ItemByIdAsync), new { id = item.Id }, null);
+        var actionName = nameof(ItemByIdAsync);
+        return CreatedAtAction(actionName, new { id = item.Id }, null);
     }
 
     //DELETE api/v1/[controller]/id

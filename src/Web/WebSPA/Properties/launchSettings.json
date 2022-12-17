@@ -3,16 +3,14 @@
     "Docker": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "publishAllPorts": true
+      "environmentVariables": {}
     },
     "WebSPA": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "launchUrl": "",
+      "applicationUrl": "http://localhost:5104",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5104"
+      }
     }
   }
 }

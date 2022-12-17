@@ -140,3 +140,11 @@ static_resources:
     - socket_address:
         address: eshop-ordering-signalrhub
         port_value: 80
+  - name: coupon
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+      - socket_address:
+          address: coupon-api
+          port_value: 80

@@ -2,7 +2,6 @@
   "profiles": {
     "Microsoft.eShopOnContainers.Services.Ordering.API": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "http://localhost:55102/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

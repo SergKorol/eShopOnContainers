@@ -11,6 +11,8 @@ import { BasketWrapperService } from '../shared/services/basket.wrapper.service'
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
+import { ICoupon } from '../shared/models/coupon.model';
+
 @Injectable()
 export class OrdersService {
     private ordersUrl: string = '';
@@ -27,6 +29,14 @@ export class OrdersService {
         let url = this.ordersUrl + '/o/api/v1/orders';
 
         return this.service.get(url).pipe<IOrder[]>(tap((response: any) => {
+            return response;
+        }));
+    }
+
+    checkValidationCoupon(code: string): Observable<ICoupon> {
+        let url = this.ordersUrl + `/cp/api/v1/coupon/${code}`;
+
+        return this.service.get(url).pipe<ICoupon>(tap((response: any) => {
             return response;
         }));
     }
