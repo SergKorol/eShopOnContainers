@@ -66,12 +66,13 @@ public class CatalogController : ControllerBase
     {
         var numIds = ids.Split(',').Select(id => (Ok: int.TryParse(id, out int x), Value: x));
 
-        if (!numIds.All(nid => nid.Ok))
+        var valueTuples = numIds as (bool Ok, int Value)[] ?? numIds.ToArray();
+        if (!valueTuples.All(nid => nid.Ok))
         {
             return new List<CatalogItem>();
         }
 
-        var idsToSelect = numIds
+        var idsToSelect = valueTuples
             .Select(id => id.Value);
 
         var items = await _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToListAsync();
@@ -238,7 +239,8 @@ public class CatalogController : ControllerBase
             await _catalogContext.SaveChangesAsync();
         }
 
-        return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
+        var itemName = nameof(ItemByIdAsync);
+        return CreatedAtAction(itemName, new { id = productToUpdate.Id }, null);
     }
 
     //POST api/v1/[controller]/items
@@ -260,8 +262,8 @@ public class CatalogController : ControllerBase
         _catalogContext.CatalogItems.Add(item);
 
         await _catalogContext.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(ItemByIdAsync), new { id = item.Id }, null);
+        var itemName = nameof(ItemByIdAsync);
+        return CreatedAtAction(itemName, new { id = item.Id }, null);
     }
 
     //DELETE api/v1/[controller]/id

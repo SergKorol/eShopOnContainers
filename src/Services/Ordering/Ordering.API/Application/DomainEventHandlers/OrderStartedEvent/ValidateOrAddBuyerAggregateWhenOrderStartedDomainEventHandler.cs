@@ -1,4 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStartedEvent;
+﻿using Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events;
+using Ordering.Domain.Events;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStartedEvent;
 
 public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
                     : INotificationHandler<OrderStartedDomainEvent>

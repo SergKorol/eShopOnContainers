@@ -10,6 +10,8 @@ export interface IOrderDetail {
     state: string;
     zipcode: string;
     country: number;
+    coupon: string;
+    discount: number;
     total: number;
     orderitems: IOrderItem[];
 }

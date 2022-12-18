@@ -63,16 +63,16 @@ export class SecurityService {
 
         this.getUserData()
             .subscribe(data => {
-                this.UserData = data;
-                this.storage.store('userData', data);
-                // emit observable
-                this.authenticationSource.next(true);
-                window.location.href = location.origin;
-            },
-            error => this.HandleError(error),
-            () => {
-                console.log(this.UserData);
-            });
+                    this.UserData = data;
+                    this.storage.store('userData', data);
+                    // emit observable
+                    this.authenticationSource.next(true);
+                    window.location.href = location.origin;
+                },
+                error => this.HandleError(error),
+                () => {
+                    console.log(this.UserData);
+                });
     }
 
     public Authorize() {
@@ -82,7 +82,7 @@ export class SecurityService {
         let client_id = 'js';
         let redirect_uri = location.origin + '/';
         let response_type = 'id_token token';
-        let scope = 'openid profile orders basket webshoppingagg orders.signalrhub';
+        let scope = 'openid profile orders basket marketing locations webshoppingagg orders.signalrhub coupon';
         let nonce = 'N' + Math.random() + '' + Date.now();
         let state = Date.now() + '' + Math.random();
 
@@ -198,7 +198,7 @@ export class SecurityService {
 
         if (typeof token !== 'undefined') {
             let encoded = token.split('.')[1];
-            
+
             data = JSON.parse(this.urlBase64Decode(encoded));
         }
 

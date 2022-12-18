@@ -46,6 +46,10 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00834" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ApiGateways\Web.Bff.Shopping\aggregator\Web.Shopping.HttpAggregator.csproj" />
+  </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

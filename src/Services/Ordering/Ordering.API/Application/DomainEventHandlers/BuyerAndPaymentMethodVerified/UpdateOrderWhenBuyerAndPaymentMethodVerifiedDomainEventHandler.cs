@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.BuyerAndPaymentMethodVerified;
+﻿using Ordering.Domain.Events;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.BuyerAndPaymentMethodVerified;
 
 public class UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler
                 : INotificationHandler<BuyerAndPaymentMethodVerifiedDomainEvent>

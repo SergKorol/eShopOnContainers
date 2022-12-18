@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+      <Content Include="Infrastructure\.DS_Store" />
+      <Content Include="IntegrationEvents\.DS_Store" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks">
+        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.AspNetCore.Diagnostics.HealthChecks.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Data.SqlClient">
+        <HintPath>..\..\Identity\Identity.API\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Hosting.Abstractions">
+        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.1.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.2" />
+      <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
+      <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.1-rc2.4" />
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0-preview.1" />
+      <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0-beta1" />
+      <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="3.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.12" />
+      <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.24" />
+      <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
+      <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="Serilog" Version="2.12.1-dev-01635" />
+      <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+      <PackageReference Include="Serilog.Settings.Configuration" Version="3.5.0-dev-00359" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
+      <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0-beta.9" />
+      <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.3-dev-00260" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.6.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
+    </ItemGroup>
+
+</Project>

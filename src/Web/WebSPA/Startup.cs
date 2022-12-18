@@ -1,3 +1,5 @@
+using Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Services;
+
 namespace eShopConContainers.WebSPA;
 
 public class Startup
@@ -46,7 +48,7 @@ public class Startup
             {
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             });
-
+        services.AddHttpClient<ICouponService, CouponService>();
         // Setup where the compiled version of our spa application will be, when in production. 
         services.AddSpaStaticFiles(configuration =>
         {
@@ -104,13 +106,19 @@ public class Startup
         app.UseRouting();
         app.UseEndpoints(endpoints =>
         {
+            // Add the MapFeatureManagement code
+
+            endpoints.MapControllerRoute(
+                name: "CouponStatus",
+                pattern: "{controller=CouponStatus}/{action=Index}/{id?}");
+
             endpoints.MapDefaultControllerRoute();
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
             {
                 Predicate = r => r.Name.Contains("self")
             });
-            endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+            endpoints.MapHealthChecks("/hc", new HealthCheckOptions
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

@@ -64,15 +64,15 @@ public class Startup
             endpoints.MapControllerRoute("default", "{controller=Catalog}/{action=Index}/{id?}");
             endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-            {
-                Predicate = r => r.Name.Contains("self")
-            });
-            endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
+            // endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            // {
+            //     Predicate = r => r.Name.Contains("self")
+            // });
+            // endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+            // {
+            //     Predicate = _ => true,
+            //     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            // });
         });
     }
 }
@@ -90,9 +90,9 @@ static class ServiceCollectionExtensions
 
     public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddUrlGroup(new Uri(configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" });
+        // services.AddHealthChecks()
+        //     .AddCheck("self", () => HealthCheckResult.Healthy())
+        //     .AddUrlGroup(new Uri(configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" });
 
         return services;
     }

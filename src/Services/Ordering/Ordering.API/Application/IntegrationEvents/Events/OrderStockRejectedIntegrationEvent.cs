@@ -1,27 +1,31 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;    
-
-public record OrderStockRejectedIntegrationEvent : IntegrationEvent
+﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
-    public int OrderId { get; }
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+    using System.Collections.Generic;
 
-    public List<ConfirmedOrderStockItem> OrderStockItems { get; }
-
-    public OrderStockRejectedIntegrationEvent(int orderId,
-        List<ConfirmedOrderStockItem> orderStockItems)
+    public record OrderStockRejectedIntegrationEvent : IntegrationEvent
     {
-        OrderId = orderId;
-        OrderStockItems = orderStockItems;
+        public int OrderId { get; }
+
+        public List<ConfirmedOrderStockItem> OrderStockItems { get; }
+
+        public OrderStockRejectedIntegrationEvent(int orderId,
+            List<ConfirmedOrderStockItem> orderStockItems)
+        {
+            OrderId = orderId;
+            OrderStockItems = orderStockItems;
+        }
     }
-}
 
-public record ConfirmedOrderStockItem
-{
-    public int ProductId { get; }
-    public bool HasStock { get; }
-
-    public ConfirmedOrderStockItem(int productId, bool hasStock)
+    public class ConfirmedOrderStockItem
     {
-        ProductId = productId;
-        HasStock = hasStock;
+        public int ProductId { get; }
+        public bool HasStock { get; }
+
+        public ConfirmedOrderStockItem(int productId, bool hasStock)
+        {
+            ProductId = productId;
+            HasStock = hasStock;
+        }
     }
 }
