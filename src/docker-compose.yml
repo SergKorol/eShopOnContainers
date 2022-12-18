@@ -44,6 +44,12 @@ services:
       - sqldata
       - rabbitmq
 
+  coupon-api:
+    image: ${REGISTRY:-eshopdev}/coupon.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Coupon/Coupon.API/Dockerfile
+
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
     build:

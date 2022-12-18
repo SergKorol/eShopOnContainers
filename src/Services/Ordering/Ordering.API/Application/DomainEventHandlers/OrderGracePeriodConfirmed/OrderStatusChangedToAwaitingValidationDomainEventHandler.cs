@@ -1,4 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderGracePeriodConfirmed;
+﻿using Microsoft.eShopOnContainers.Services.Ordering.Domain.Events;
+using Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderGracePeriodConfirmed;
     
 public class OrderStatusChangedToAwaitingValidationDomainEventHandler
                 : INotificationHandler<OrderStatusChangedToAwaitingValidationDomainEvent>
@@ -30,7 +33,7 @@ public class OrderStatusChangedToAwaitingValidationDomainEventHandler
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
         var orderStockList = orderStatusChangedToAwaitingValidationDomainEvent.OrderItems
-            .Select(orderItem => new OrderStockItem(orderItem.ProductId, orderItem.GetUnits()));
+            .Select(orderItem => new OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderStockItem(orderItem.ProductId, orderItem.GetUnits()));
 
         var orderStatusChangedToAwaitingValidationIntegrationEvent = new OrderStatusChangedToAwaitingValidationIntegrationEvent(
             order.Id, order.OrderStatus.Name, buyer.Name, orderStockList);

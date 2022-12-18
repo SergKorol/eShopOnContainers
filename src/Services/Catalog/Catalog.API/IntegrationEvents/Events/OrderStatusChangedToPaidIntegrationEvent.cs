@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+﻿using Webhooks.API.IntegrationEvents;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
 
 public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
 {

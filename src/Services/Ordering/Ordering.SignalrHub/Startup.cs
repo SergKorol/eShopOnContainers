@@ -1,3 +1,8 @@
+using Coupon.API.IntegrationEvents.EventHandlers;
+using Coupon.API.IntegrationEvents.Events;
+using OrderStatusChangedToCancelledIntegrationEvent = Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events.OrderStatusChangedToCancelledIntegrationEvent;
+using OrderStatusChangedToCancelledIntegrationEventHandler = Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.EventHandling.OrderStatusChangedToCancelledIntegrationEventHandler;
+
 namespace Microsoft.eShopOnContainers.Services.Ordering.SignalrHub;
 
 public class Startup
@@ -137,6 +142,7 @@ public class Startup
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
         eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+        eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToStockConfirmedIntegrationEvent, OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToShippedIntegrationEvent, OrderStatusChangedToShippedIntegrationEventHandler>();

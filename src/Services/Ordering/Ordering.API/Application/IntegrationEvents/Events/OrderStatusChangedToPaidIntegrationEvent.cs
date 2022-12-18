@@ -1,21 +1,24 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
-
-public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
+﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
-    public int OrderId { get; }
-    public string OrderStatus { get; }
-    public string BuyerName { get; }
-    public IEnumerable<OrderStockItem> OrderStockItems { get; }
+    using System.Collections.Generic;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 
-    public OrderStatusChangedToPaidIntegrationEvent(int orderId,
-        string orderStatus,
-        string buyerName,
-        IEnumerable<OrderStockItem> orderStockItems)
+    public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
     {
-        OrderId = orderId;
-        OrderStockItems = orderStockItems;
-        OrderStatus = orderStatus;
-        BuyerName = buyerName;
+        public int OrderId { get; }
+        public string OrderStatus { get; }
+        public string BuyerName { get; }
+        public IEnumerable<OrderStockItem> OrderStockItems { get; }
+
+        public OrderStatusChangedToPaidIntegrationEvent(int orderId,
+            string orderStatus,
+            string buyerName,
+            IEnumerable<OrderStockItem> orderStockItems)
+        {
+            OrderId = orderId;
+            OrderStockItems = orderStockItems;
+            OrderStatus = orderStatus;
+            BuyerName = buyerName;
+        }
     }
 }
-

@@ -82,6 +82,7 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+        <ProjectReference Include="..\..\Webhooks\Webhooks.API\Webhooks.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>

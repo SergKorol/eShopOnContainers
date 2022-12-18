@@ -7,6 +7,7 @@ import { IOrderDetail } from "../shared/models/order-detail.model";
 import { SecurityService } from '../shared/services/security.service';
 import { ConfigurationService } from '../shared/services/configuration.service';
 import { BasketWrapperService } from '../shared/services/basket.wrapper.service';
+import { ICoupon } from '../shared/models/coupon.model';
 
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -47,6 +48,15 @@ export class OrdersService {
             return response;
         }));
     }
+
+    checkValidationCoupon(code: string): Observable<ICoupon> {
+        let url = this.ordersUrl + `/cp/api/v1/coupon/${code}`;
+
+        return this.service.get(url).pipe<ICoupon>(tap((response: any) => {
+            return response;
+        }));
+    }
+
 
     mapOrderAndIdentityInfoNewOrder(): IOrder {
         let order = <IOrder>{};

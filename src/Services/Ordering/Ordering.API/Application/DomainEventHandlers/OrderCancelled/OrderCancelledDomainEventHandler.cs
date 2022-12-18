@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopOnContainers.Services.Ordering.Domain.Events;
+﻿using Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events;
+using Ordering.Domain.Events;
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderCancelled;
 

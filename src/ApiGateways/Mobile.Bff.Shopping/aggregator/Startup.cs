@@ -83,7 +83,7 @@ public static class ServiceCollectionExtensions
 
         services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
-
+        
         services.AddSwaggerGen(options =>
         {
             options.DescribeAllEnumsAsStrings();
