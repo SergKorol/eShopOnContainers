@@ -1,3 +1,5 @@
+using System.Net.Mime;
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Coupon.API.Extensions;
 using Coupon.API.Infrastructure;
@@ -24,7 +26,20 @@ namespace Coupon.API
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((host, builder) =>
                 {
-                    builder.SetBasePath(Directory.GetCurrentDirectory())
+                    var path = Directory.GetCurrentDirectory();
+                    Console.WriteLine("PATH SETTINGS:");
+                    Console.WriteLine(path);
+                    if (path.EndsWith("bin/Debug/net6.0"))
+                    {
+                        path = path.Remove(path.Length-16);
+                    }
+
+                    if (path.EndsWith("/bin/Release/net6.0"))
+                    {
+                        path = path.Remove(path.Length-18);
+                    }
+
+                    builder.SetBasePath(path)
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true)
                         .AddEnvironmentVariables();
