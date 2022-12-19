@@ -1,6 +1,6 @@
-﻿using Coupon.API.IntegrationEvents.EventHandlers;
+﻿using System.Data.SqlClient;
+using Coupon.API.IntegrationEvents.EventHandlers;
 using Coupon.API.IntegrationEvents.Events;
-using Microsoft.Data.SqlClient;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -1,3 +1,5 @@
+using Microsoft.eShopOnContainers.Services.Catalog;
+
 namespace Catalog.FunctionalTests;
 
 public class CatalogScenariosBase

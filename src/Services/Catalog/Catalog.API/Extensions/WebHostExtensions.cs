@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog;
 
 public static class WebHostExtensions
 {

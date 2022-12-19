@@ -1,4 +1,4 @@
-﻿using Coupon.API.IntegrationEvents.Events;
+﻿using Ordering.SignalrHub.IntegrationEvents.Events;
 
 namespace Ordering.SignalrHub.IntegrationEvents
 {
