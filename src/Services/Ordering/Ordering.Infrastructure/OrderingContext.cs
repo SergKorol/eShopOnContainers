@@ -1,4 +1,5 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
+﻿#nullable enable
+namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
 
 public class OrderingContext : DbContext, IUnitOfWork
 {

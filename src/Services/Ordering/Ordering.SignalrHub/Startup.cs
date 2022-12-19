@@ -1,5 +1,5 @@
-using Coupon.API.IntegrationEvents.EventHandlers;
-using Coupon.API.IntegrationEvents.Events;
+using Ordering.SignalrHub.IntegrationEvents;
+using Ordering.SignalrHub.IntegrationEvents.Events;
 using OrderStatusChangedToCancelledIntegrationEvent = Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events.OrderStatusChangedToCancelledIntegrationEvent;
 using OrderStatusChangedToCancelledIntegrationEventHandler = Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.EventHandling.OrderStatusChangedToCancelledIntegrationEventHandler;
 

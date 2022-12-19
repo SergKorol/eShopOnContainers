@@ -45,10 +45,13 @@ services:
       - rabbitmq
 
   coupon-api:
-    image: ${REGISTRY:-eshopdev}/coupon.api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-eshop}/coupon.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Services/Coupon/Coupon.API/Dockerfile
+      dockerfile: Services/Coupon/Coupon.API/Dockerfile
+    depends_on:
+      - nosqldata
+      - rabbitmq
 
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}

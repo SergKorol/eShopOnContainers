@@ -1,14 +1,12 @@
-﻿using Webhooks.API.IntegrationEvents;
-
-namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
 
 public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
 {
     public int OrderId { get; }
-    public IEnumerable<OrderStockItem> OrderStockItems { get; }
+    public IEnumerable<OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderStockItem> OrderStockItems { get; }
 
     public OrderStatusChangedToPaidIntegrationEvent(int orderId,
-        IEnumerable<OrderStockItem> orderStockItems)
+        IEnumerable<OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderStockItem> orderStockItems)
     {
         OrderId = orderId;
         OrderStockItems = orderStockItems;

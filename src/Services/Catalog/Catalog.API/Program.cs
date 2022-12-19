@@ -17,6 +17,7 @@
                 var host = CreateHostBuilder(configuration, args);
 
                 Log.Information("Applying migrations ({ApplicationContext})...", AppName);
+                
                 host.MigrateDbContext<CatalogContext>((context, services) =>
                 {
                     var env = services.GetService<IWebHostEnvironment>();

@@ -1,6 +1,4 @@
 using Ordering.API.Application.IntegrationEvents.Events;
-using OrderCouponConfirmedIntegrationEvent = Coupon.API.IntegrationEvents.Events.OrderCouponConfirmedIntegrationEvent;
-using OrderCouponRejectedIntegrationEvent = Coupon.API.IntegrationEvents.Events.OrderCouponRejectedIntegrationEvent;
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.API;
 
