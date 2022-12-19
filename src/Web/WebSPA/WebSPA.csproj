@@ -15,6 +15,10 @@
     <SpaRoot>Client\</SpaRoot>
   </PropertyGroup>
 
+  <PropertyGroup>
+        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Setup\images.zip">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

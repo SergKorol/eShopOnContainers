@@ -3,9 +3,21 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
+        <DebugType>portable</DebugType>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <AssemblyName>Coupon.API</AssemblyName>
+        <PackageId>Coupon.API</PackageId>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath />
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath />
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +26,12 @@
       </Content>
       <Content Include="Infrastructure\.DS_Store" />
       <Content Include="IntegrationEvents\.DS_Store" />
+    </ItemGroup>
+
+    <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     </ItemGroup>
 
     <ItemGroup>

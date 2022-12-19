@@ -9,6 +9,10 @@
         <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    </PropertyGroup>
+
     <ItemGroup>
         <Content Update="web.config;">
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

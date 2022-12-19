@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -60,4 +60,6 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY --from=build /src/Services/Coupon/Coupon.API/appsettings.json .
+COPY --from=build /src/Services/Coupon/Coupon.API/appsettings.Development.json .
 ENTRYPOINT ["dotnet", "Coupon.API.dll"]
