@@ -14,6 +14,7 @@ export interface IOrder {
     cardtypeid: number;
     buyer: string;
     ordernumber: string;
+    subtotal: number,
     coupon: string;
     discount: number;
     total: number;
