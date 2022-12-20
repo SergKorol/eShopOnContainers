@@ -1,3 +1,4 @@
+
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { catchError } from 'rxjs/operators';
@@ -90,7 +91,7 @@ export class OrdersNewComponent implements OnInit {
             .pipe(catchError((errMessage) => {
                 this.errorReceived = true;
                 this.isOrderProcessing = false;
-                return observableThrowError(errMessage);
+                return observableThrowError(errMessage); 
             }))
             .subscribe(res => {
                 this.router.navigate(['orders']);
