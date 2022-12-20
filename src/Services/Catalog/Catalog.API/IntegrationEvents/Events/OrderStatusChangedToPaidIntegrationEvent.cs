@@ -3,10 +3,10 @@
 public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
 {
     public int OrderId { get; }
-    public IEnumerable<OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderStockItem> OrderStockItems { get; }
+    public IEnumerable<OrderStockItem> OrderStockItems { get; }
 
     public OrderStatusChangedToPaidIntegrationEvent(int orderId,
-        IEnumerable<OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderStockItem> orderStockItems)
+        IEnumerable<OrderStockItem> orderStockItems)
     {
         OrderId = orderId;
         OrderStockItems = orderStockItems;

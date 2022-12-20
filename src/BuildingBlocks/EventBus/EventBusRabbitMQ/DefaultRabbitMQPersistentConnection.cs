@@ -62,7 +62,7 @@ public class DefaultRabbitMQPersistentConnection
                     _logger.LogWarning(ex, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                 }
             );
-            
+
             policy.Execute(() =>
             {
                 _connection = _connectionFactory

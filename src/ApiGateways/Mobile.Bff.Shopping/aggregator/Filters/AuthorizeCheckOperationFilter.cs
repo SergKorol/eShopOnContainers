@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Filters
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Filters
 {
     namespace Basket.API.Infrastructure.Filters
     {
@@ -8,7 +8,7 @@
             {
                 // Check for authorize attribute
                 var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
-                                   context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+                                    context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
                 if (!hasAuthorize) return;
 
@@ -21,13 +21,14 @@
                 };
 
                 operation.Security = new List<OpenApiSecurityRequirement>
+            {
+                new()
                 {
-                    new()
-                    {
-                        [ oAuthScheme ] = new [] { "Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator" }
-                    }
-                };
+                    [ oAuthScheme ] = new[] { "Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator" }
+                }
+            };
             }
         }
     }
+
 }

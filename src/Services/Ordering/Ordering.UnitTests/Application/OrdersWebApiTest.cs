@@ -1,6 +1,4 @@
-﻿using Ordering.API.Application.Commands;
-
-namespace UnitTest.Ordering.Application;
+﻿namespace UnitTest.Ordering.Application;
 
 using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;
 

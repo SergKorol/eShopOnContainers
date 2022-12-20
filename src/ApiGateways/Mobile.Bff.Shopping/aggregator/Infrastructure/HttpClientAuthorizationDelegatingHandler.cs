@@ -1,30 +1,26 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Infrastructure;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Infrastructure;
 
-public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
+public class HttpClientAuthorizationDelegatingHandler
+        : DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ILogger<HttpClientAuthorizationDelegatingHandler> _logger;
 
-    public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccessor, ILogger<HttpClientAuthorizationDelegatingHandler> logger)
+    public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
-        _logger = logger;
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Version = new System.Version(2, 0);
-        request.Method = HttpMethod.Get;
-
         var authorizationHeader = _httpContextAccessor.HttpContext
             .Request.Headers["Authorization"];
 
-        if (!string.IsNullOrEmpty(authorizationHeader))
+        if (!string.IsNullOrWhiteSpace(authorizationHeader))
         {
             request.Headers.Add("Authorization", new List<string>() { authorizationHeader });
         }
 
-        var token = await GetToken();
+        var token = await GetTokenAsync();
 
         if (token != null)
         {
@@ -34,11 +30,11 @@ public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
         return await base.SendAsync(request, cancellationToken);
     }
 
-    async Task<string> GetToken()
+    Task<string> GetTokenAsync()
     {
         const string ACCESS_TOKEN = "access_token";
 
-        return await _httpContextAccessor.HttpContext
+        return _httpContextAccessor.HttpContext
             .GetTokenAsync(ACCESS_TOKEN);
     }
 }

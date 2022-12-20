@@ -4,6 +4,6 @@ public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandl
 {
     public async Task Handle(ProductPriceChangedIntegrationEvent @event)
     {
-        // int i = 0;
+        int i = 0;
     }
 }

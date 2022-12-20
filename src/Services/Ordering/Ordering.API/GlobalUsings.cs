@@ -35,7 +35,9 @@ global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Behav
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStartedEvent;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStockConfirmed;
+global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.AutofacModules;
+global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;

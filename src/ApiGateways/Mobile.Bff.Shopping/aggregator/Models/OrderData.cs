@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Models;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Models;
 
 public class OrderData
 {
@@ -40,3 +40,4 @@ public class OrderData
 
     public List<OrderItemData> OrderItems { get; } = new();
 }
+

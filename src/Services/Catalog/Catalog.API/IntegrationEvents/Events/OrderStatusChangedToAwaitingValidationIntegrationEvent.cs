@@ -11,16 +11,16 @@ public record OrderStatusChangedToAwaitingValidationIntegrationEvent : Integrati
         OrderId = orderId;
         OrderStockItems = orderStockItems;
     }
-    
-    public class OrderStockItem
-    {
-        public int ProductId { get; }
-        public int Units { get; }
+}
 
-        public OrderStockItem(int productId, int units)
-        {
-            ProductId = productId;
-            Units = units;
-        }
+public record OrderStockItem
+{
+    public int ProductId { get; }
+    public int Units { get; }
+
+    public OrderStockItem(int productId, int units)
+    {
+        ProductId = productId;
+        Units = units;
     }
 }

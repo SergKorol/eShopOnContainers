@@ -48,7 +48,7 @@ COPY "NuGet.config" "NuGet.config"
 RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
 
 COPY . .
-WORKDIR /src/ApiGateways/Mobile.Bff.Shopping/aggregator
+WORKDIR /src/ApiGateways/Web.Bff.Shopping/aggregator
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build AS publish
@@ -56,5 +56,4 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Mobile.Shopping.HttpAggregator.dll"]
-
+ENTRYPOINT ["dotnet", "Web.Shopping.HttpAggregator.dll"]
