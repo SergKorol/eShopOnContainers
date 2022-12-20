@@ -1,8 +1,4 @@
-﻿using Ordering.API.Application.IntegrationEvents;
-using Ordering.API.Application.IntegrationEvents.Events;
-using Ordering.Domain.Events;
-
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderPaid;
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderPaid;
     
 public class OrderStatusChangedToPaidDomainEventHandler
                 : INotificationHandler<OrderStatusChangedToPaidDomainEvent>

@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Services;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Services;
 
 public class BasketService : IBasketService
 {
@@ -10,7 +10,7 @@ public class BasketService : IBasketService
         _basketClient = basketClient;
         _logger = logger;
     }
-
+    
     public async Task<BasketData> GetByIdAsync(string id)
     {
         _logger.LogDebug("grpc client created, request = {@id}", id);
@@ -41,16 +41,22 @@ public class BasketService : IBasketService
             BuyerId = customerBasketRequest.Buyerid
         };
 
-        customerBasketRequest.Items.ToList().ForEach(item => map.Items.Add(new BasketDataItem
+        customerBasketRequest.Items.ToList().ForEach(item =>
         {
-            Id = item.Id,
-            OldUnitPrice = (decimal)item.Oldunitprice,
-            PictureUrl = item.Pictureurl,
-            ProductId = item.Productid,
-            ProductName = item.Productname,
-            Quantity = item.Quantity,
-            UnitPrice = (decimal)item.Unitprice
-        }));
+            if (item.Id != null)
+            {
+                map.Items.Add(new BasketDataItem
+                {
+                    Id = item.Id,
+                    OldUnitPrice = (decimal)item.Oldunitprice,
+                    PictureUrl = item.Pictureurl,
+                    ProductId = item.Productid,
+                    ProductName = item.Productname,
+                    Quantity = item.Quantity,
+                    UnitPrice = (decimal)item.Unitprice
+                });
+            }
+        });
 
         return map;
     }
@@ -67,16 +73,22 @@ public class BasketService : IBasketService
             Buyerid = basketData.BuyerId
         };
 
-        basketData.Items.ToList().ForEach(item => map.Items.Add(new BasketItemResponse
+        basketData.Items.ToList().ForEach(item =>
         {
-            Id = item.Id,
-            Oldunitprice = (double)item.OldUnitPrice,
-            Pictureurl = item.PictureUrl,
-            Productid = item.ProductId,
-            Productname = item.ProductName,
-            Quantity = item.Quantity,
-            Unitprice = (double)item.UnitPrice
-        }));
+            if (item.Id != null)
+            {
+                map.Items.Add(new BasketItemResponse
+                {
+                    Id = item.Id,
+                    Oldunitprice = (double)item.OldUnitPrice,
+                    Pictureurl = item.PictureUrl,
+                    Productid = item.ProductId,
+                    Productname = item.ProductName,
+                    Quantity = item.Quantity,
+                    Unitprice = (double)item.UnitPrice
+                });
+            }
+        });
 
         return map;
     }

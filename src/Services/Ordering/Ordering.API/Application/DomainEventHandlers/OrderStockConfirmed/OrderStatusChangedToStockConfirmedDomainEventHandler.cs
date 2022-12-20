@@ -1,7 +1,4 @@
-﻿using Microsoft.eShopOnContainers.Services.Ordering.Domain.Events;
-using Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events;
-
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStockConfirmed;
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStockConfirmed;
 
 public class OrderStatusChangedToStockConfirmedDomainEventHandler
                 : INotificationHandler<OrderStatusChangedToStockConfirmedDomainEvent>

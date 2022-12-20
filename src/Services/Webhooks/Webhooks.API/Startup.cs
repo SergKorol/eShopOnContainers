@@ -82,7 +82,7 @@ public class Startup
     protected virtual void ConfigureEventBus(IApplicationBuilder app)
     {
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-        // eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
+        eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToShippedIntegrationEvent, OrderStatusChangedToShippedIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
     }
@@ -206,7 +206,7 @@ internal static class CustomExtensionMethods
         }
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        // services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
+        services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
         services.AddTransient<OrderStatusChangedToShippedIntegrationEventHandler>();
         services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 

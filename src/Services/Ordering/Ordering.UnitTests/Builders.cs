@@ -24,9 +24,7 @@ public class OrderBuilder
             cardNumber: "12",
             cardSecurityNumber: "123",
             cardHolderName: "name",
-            cardExpiration: DateTime.UtcNow,
-            "DISC15",
-            15);
+            cardExpiration: DateTime.UtcNow);
     }
 
     public OrderBuilder AddOne(

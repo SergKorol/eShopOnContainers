@@ -1,6 +1,4 @@
-﻿using Ordering.API.Application.Commands;
-
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Controllers;
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Controllers;
 
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
 using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;

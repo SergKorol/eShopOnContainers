@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Models;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Models;
 
 public class CatalogItem
 {
@@ -10,3 +10,5 @@ public class CatalogItem
 
     public string PictureUri { get; set; }
 }
+
+

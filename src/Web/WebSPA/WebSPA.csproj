@@ -17,6 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Client\.DS_Store" />
+    <Content Include="Server\.DS_Store" />
     <Content Include="Setup\images.zip">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -46,6 +48,101 @@
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\3rdpartylicenses.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\css\site.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Bold.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Bold.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Bold.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Bold.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Bold.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-ExtraLight.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-ExtraLight.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-ExtraLight.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-ExtraLight.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-ExtraLight.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Light.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Light.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Light.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Light.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Light.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Medium.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Medium.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Medium.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Medium.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Medium.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Regular.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Regular.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Regular.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Regular.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-Regular.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-SemiBold.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-SemiBold.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-SemiBold.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-SemiBold.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\fonts\Oswald-SemiBold.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\add.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\arrow-down.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\arrow-right.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\brand.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\brand_dark.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\cart.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\cart.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\delete.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\header.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\logo.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\logout.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\logo_color.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\main_banner.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\main_banner_text.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\main_banner_text.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\main_footer_text.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\minus.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\my_orders.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\plus.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\refresh.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\user.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\lib\css\bootstrap.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\lib\css\bootstrap.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\lib\css\bootstrap.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\lib\css\bootstrap.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\index.html" />
+    <_ContentIncludedByDefault Remove="wwwroot\main.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Bold.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Bold.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Bold.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Bold.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Bold.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-ExtraLight.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-ExtraLight.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-ExtraLight.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-ExtraLight.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-ExtraLight.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Light.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Light.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Light.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Light.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Light.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Medium.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Medium.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Medium.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Medium.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Medium.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Regular.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Regular.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Regular.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Regular.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-Regular.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-SemiBold.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-SemiBold.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-SemiBold.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-SemiBold.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\Oswald-SemiBold.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\polyfills.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\runtime.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\styles.css" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -1,6 +1,5 @@
-
-import {throwError as observableThrowError,  Observable, Subscription } from 'rxjs';
 import { Component, OnInit }    from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { catchError }           from 'rxjs/operators';
 
 import { CatalogService }       from './catalog.service';
@@ -57,6 +56,10 @@ export class CatalogComponent implements OnInit {
 
     onFilterApplied(event: any) {
         event.preventDefault();
+        
+        this.brandSelected = this.brandSelected && this.brandSelected.toString() != "null" ? this.brandSelected : null;
+        this.typeSelected = this.typeSelected && this.typeSelected.toString() != "null" ? this.typeSelected : null;
+        this.paginationInfo.actualPage = 0;
         this.getCatalog(this.paginationInfo.itemsPage, this.paginationInfo.actualPage, this.brandSelected, this.typeSelected);
     }
 
@@ -118,7 +121,7 @@ export class CatalogComponent implements OnInit {
 
     private handleError(error: any) {
         this.errorReceived = true;
-        return observableThrowError(error);
+        return Observable.throw(error);
     }
 }
 

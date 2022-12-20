@@ -1,19 +1,16 @@
-﻿using BasketItem = Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models.BasketItem;
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models;
 
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
+public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
 {
-    public class CreateOrderDraftCommand :  IRequest<OrderDraftDTO>
+
+    public string BuyerId { get; private set; }
+
+    public IEnumerable<BasketItem> Items { get; private set; }
+
+    public CreateOrderDraftCommand(string buyerId, IEnumerable<BasketItem> items)
     {
-       
-        public string BuyerId { get; private set; }
-
-        public IEnumerable<BasketItem> Items { get; private set; }
-
-        public CreateOrderDraftCommand(string buyerId, IEnumerable<BasketItem> items)
-        {
-            BuyerId = buyerId;
-            Items = items;
-        }
+        BuyerId = buyerId;
+        Items = items;
     }
-
 }

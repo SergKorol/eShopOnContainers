@@ -1,7 +1,4 @@
-﻿using Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events;
-using Ordering.Domain.Events;
-
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderShipped;
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderShipped;
 
 public class OrderShippedDomainEventHandler
                 : INotificationHandler<OrderShippedDomainEvent>

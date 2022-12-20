@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Controllers;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]
@@ -28,6 +28,7 @@ public class BasketController : ControllerBase
         // Retrieve the current basket
         var basket = await _basket.GetByIdAsync(data.BuyerId) ?? new BasketData(data.BuyerId);
         var catalogItems = await _catalog.GetCatalogItemsAsync(data.Items.Select(x => x.ProductId));
+
         // group by product id to avoid duplicates
         var itemsCalculated = data
                 .Items
@@ -93,12 +94,10 @@ public class BasketController : ControllerBase
         foreach (var update in data.Updates)
         {
             var basketItem = currentBasket.Items.SingleOrDefault(bitem => bitem.Id == update.BasketItemId);
-
             if (basketItem == null)
             {
                 return BadRequest($"Basket item with id {update.BasketItemId} not found");
             }
-
             basketItem.Quantity = update.NewQty;
         }
 
@@ -126,18 +125,28 @@ public class BasketController : ControllerBase
 
         // Step 2: Get current basket status
         var currentBasket = (await _basket.GetByIdAsync(data.BasketId)) ?? new BasketData(data.BasketId);
-        // Step 3: Merge current status with new product
-        currentBasket.Items.Add(new BasketDataItem()
+        // Step 3: Search if exist product into basket
+        var product = currentBasket.Items.SingleOrDefault(i => i.ProductId == item.Id);
+        if (product != null)
         {
-            UnitPrice = item.Price,
-            PictureUrl = item.PictureUri,
-            ProductId = item.Id,
-            ProductName = item.Name,
-            Quantity = data.Quantity,
-            Id = Guid.NewGuid().ToString()
-        });
+            // Step 4: Update quantity for product
+            product.Quantity += data.Quantity;
+        }
+        else
+        {
+            // Step 4: Merge current status with new product
+            currentBasket.Items.Add(new BasketDataItem()
+            {
+                UnitPrice = item.Price,
+                PictureUrl = item.PictureUri,
+                ProductId = item.Id,
+                ProductName = item.Name,
+                Quantity = data.Quantity,
+                Id = Guid.NewGuid().ToString()
+            });
+        }
 
-        // Step 4: Update basket
+        // Step 5: Update basket
         await _basket.UpdateAsync(currentBasket);
 
         return Ok();

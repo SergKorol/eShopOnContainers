@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Controllers;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]
@@ -20,7 +20,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(typeof(OrderData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<OrderData>> GetOrderDraftAsync(string basketId)
     {
-        if (string.IsNullOrEmpty(basketId))
+        if (string.IsNullOrWhiteSpace(basketId))
         {
             return BadRequest("Need a valid basketid");
         }
