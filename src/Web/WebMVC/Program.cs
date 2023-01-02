@@ -52,8 +52,22 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
 
 IConfiguration GetConfiguration()
 {
+    var path = Directory.GetCurrentDirectory();
+    Console.WriteLine("PATH SETTINGS:");
+    Console.WriteLine(path);
+    //for local testing
+    if (path.EndsWith("bin/Debug/net6.0"))
+    {
+        path = path.Remove(path.Length-16);
+    }
+
+    if (path.EndsWith("/bin/Release/net6.0"))
+    {
+        path = path.Remove(path.Length-18);
+    }
+    
     var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
+        .SetBasePath(path)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 

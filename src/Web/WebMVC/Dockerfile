@@ -56,4 +56,5 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY --from=build /src/Web/WebMVC/appsettings.json .
 ENTRYPOINT ["dotnet", "WebMVC.dll"]
