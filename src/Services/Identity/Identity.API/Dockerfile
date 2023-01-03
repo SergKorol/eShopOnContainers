@@ -56,4 +56,5 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY --from=build /src/Services/Identity/Identity.API/appsettings.json .
 ENTRYPOINT ["dotnet", "Identity.API.dll"]

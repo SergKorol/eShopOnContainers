@@ -52,7 +52,8 @@ public class Startup
 
         // Fix samesite issue when running eShop from docker-compose locally as by default http protocol is being used
         // Refer to https://github.com/dotnet-architecture/eShopOnContainers/issues/1391
-        app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = AspNetCore.Http.SameSiteMode.Lax });
+        //SameSiteMode.Lax => SameSiteMode.None for launch locally
+        app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = AspNetCore.Http.SameSiteMode.None });
 
         app.UseRouting();
 
