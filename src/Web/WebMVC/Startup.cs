@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.WebMVC;
+﻿using Microsoft.eShopOnContainers.WebMVC.Constants;
+
+namespace Microsoft.eShopOnContainers.WebMVC;
 
 public class Startup
 {
@@ -28,17 +30,17 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove(PropertyKeys.SubKey);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
         }
         else
         {
-            app.UseExceptionHandler("/Error");
+            app.UseExceptionHandler(Patterns.Error);
         }
 
-        var pathBase = Configuration["PATH_BASE"];
+        var pathBase = Configuration[PropertyKeys.PathBaseKey];
 
         if (!string.IsNullOrEmpty(pathBase))
         {
@@ -53,7 +55,7 @@ public class Startup
         // Fix samesite issue when running eShop from docker-compose locally as by default http protocol is being used
         // Refer to https://github.com/dotnet-architecture/eShopOnContainers/issues/1391
         //SameSiteMode.Lax => SameSiteMode.None for launch locally
-        app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = AspNetCore.Http.SameSiteMode.None });
+        app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None });
 
         app.UseRouting();
 
@@ -62,14 +64,14 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute("default", "{controller=Catalog}/{action=Index}/{id?}");
-            endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
+            endpoints.MapControllerRoute(PropertyNames.Default, Patterns.CatalogIndex);
+            endpoints.MapControllerRoute(PropertyNames.DefaultError, Patterns.ErrorError);
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            endpoints.MapHealthChecks(Patterns.Liveness, new HealthCheckOptions
             {
-                Predicate = r => r.Name.Contains("self")
+                Predicate = r => r.Name.Contains(PropertyNames.Self)
             });
-            endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+            endpoints.MapHealthChecks(Patterns.HC, new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -93,7 +95,7 @@ static class ServiceCollectionExtensions
     {
         services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddUrlGroup(new Uri(configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" });
+            .AddUrlGroup(new Uri(configuration[PropertyKeys.IdentityUrlHCKey]), name: PropertyNames.IdentityApiCheck, tags: new string[] { PropertyNames.IdentityApi });
 
         return services;
     }
@@ -105,13 +107,13 @@ static class ServiceCollectionExtensions
         services.AddSession();
         services.AddDistributedMemoryCache();
 
-        if (configuration.GetValue<string>("IsClusterEnv") == bool.TrueString)
+        if (configuration.GetValue<string>(PropertyKeys.IsClusterEnvKey) == bool.TrueString)
         {
             services.AddDataProtection(opts =>
             {
-                opts.ApplicationDiscriminator = "eshop.webmvc";
+                opts.ApplicationDiscriminator = PropertyNames.EshopWebMvc;
             })
-            .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(configuration["DPConnectionString"]), "DataProtection-Keys");
+            .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(configuration[PropertyKeys.DPConnectionStringKey]), PropertyKeys.DataProtectionKeysKey);
         }
 
         return services;
@@ -127,7 +129,7 @@ static class ServiceCollectionExtensions
         services.AddTransient<HttpClientRequestIdDelegatingHandler>();
 
         //set 5 min as the lifetime for each HttpMessageHandler int the pool
-        services.AddHttpClient("extendedhandlerlifetime").SetHandlerLifetime(TimeSpan.FromMinutes(5)).AddDevspacesSupport();
+        services.AddHttpClient(PropertyNames.ExtendedHandlerLifetime).SetHandlerLifetime(TimeSpan.FromMinutes(5)).AddDevspacesSupport();
 
         //add http client services
         services.AddHttpClient<IBasketService, BasketService>()
@@ -153,9 +155,9 @@ static class ServiceCollectionExtensions
 
     public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var identityUrl = configuration.GetValue<string>("IdentityUrl");
-        var callBackUrl = configuration.GetValue<string>("CallBackUrl");
-        var sessionCookieLifetime = configuration.GetValue("SessionCookieLifetimeMinutes", 60);
+        var identityUrl = configuration.GetValue<string>(PropertyKeys.IdentityUrlKey);
+        var callBackUrl = configuration.GetValue<string>(PropertyKeys.CallBackUrlKey);
+        var sessionCookieLifetime = configuration.GetValue(PropertyKeys.SessionCookieLifetimeMinutesKey, 60);
 
         // Add Authentication services          
 
@@ -170,18 +172,18 @@ static class ServiceCollectionExtensions
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.Authority = identityUrl.ToString();
             options.SignedOutRedirectUri = callBackUrl.ToString();
-            options.ClientId = "mvc";
-            options.ClientSecret = "secret";
-            options.ResponseType = "code id_token";
+            options.ClientId = Client.MVC;
+            options.ClientSecret = Client.Secret;
+            options.ResponseType = Client.CodeIdToken;
             options.SaveTokens = true;
             options.GetClaimsFromUserInfoEndpoint = true;
             options.RequireHttpsMetadata = false;
-            options.Scope.Add("openid");
-            options.Scope.Add("profile");
-            options.Scope.Add("orders");
-            options.Scope.Add("basket");
-            options.Scope.Add("webshoppingagg");
-            options.Scope.Add("orders.signalrhub");
+            options.Scope.Add(Scopes.OpenId);
+            options.Scope.Add(Scopes.Profile);
+            options.Scope.Add(Scopes.Orders);
+            options.Scope.Add(Scopes.Basket);
+            options.Scope.Add(Scopes.WebShoppingAgg);
+            options.Scope.Add(Scopes.OrdersSignalrHub);
         });
 
         return services;
