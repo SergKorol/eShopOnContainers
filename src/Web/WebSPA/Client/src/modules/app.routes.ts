@@ -12,7 +12,7 @@ export const routes: Routes = [
     { path: 'catalog', component: CatalogComponent },
     { path: 'orders', component: OrdersComponent },
     { path: 'orders/:id', component: OrdersDetailComponent },
-    { path: 'order', component: OrdersNewComponent },
+    { path: 'order', component: OrdersNewComponent }
 ];
 
-export const routing = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });
+export const routing = RouterModule.forRoot(routes);

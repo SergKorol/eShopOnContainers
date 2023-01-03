@@ -1,3 +1,2 @@
-ingress:
-  enabled: true
-  tls: []
+ocelot:
+  configPath: /app/configuration

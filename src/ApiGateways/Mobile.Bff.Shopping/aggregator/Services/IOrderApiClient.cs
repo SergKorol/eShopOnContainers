@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator.Services;
+﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Services;
 
 public interface IOrderApiClient
 {
