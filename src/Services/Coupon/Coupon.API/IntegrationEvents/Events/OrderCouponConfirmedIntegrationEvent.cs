@@ -6,9 +6,9 @@ namespace Coupon.API.IntegrationEvents.Events
     {
         public int OrderId { get; }
 
-        public int Discount { get; }
+        public decimal Discount { get; }
 
-        public OrderCouponConfirmedIntegrationEvent(int orderId, int discount)
+        public OrderCouponConfirmedIntegrationEvent(int orderId, decimal discount)
         {
             OrderId = orderId;
             Discount = discount;

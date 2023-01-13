@@ -1,16 +1,22 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public record OrderStatusChangedToCancelledIntegrationEvent : IntegrationEvent
+namespace Ordering.SignalrHub.IntegrationEvents.Events
 {
-    public int OrderId { get; }
-    public string OrderStatus { get; }
-    public string BuyerName { get; }
-
-    public OrderStatusChangedToCancelledIntegrationEvent(int orderId, string orderStatus, string buyerName)
+    public record OrderStatusChangedToCancelledIntegrationEvent : IntegrationEvent
     {
-        OrderId = orderId;
-        OrderStatus = orderStatus;
-        BuyerName = buyerName;
+        public int OrderId { get; }
+        public string OrderStatus { get; }
+        public string BuyerName { get; }
+
+        public OrderStatusChangedToCancelledIntegrationEvent(int orderId, string orderStatus, string buyerName)
+        {
+            OrderId = orderId;
+            OrderStatus = orderStatus;
+            BuyerName = buyerName;
+        }
     }
 }
-

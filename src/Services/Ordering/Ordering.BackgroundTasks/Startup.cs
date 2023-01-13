@@ -1,13 +1,16 @@
 ﻿namespace Ordering.BackgroundTasks
 {
-    using HealthChecks.UI.Client;
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Ordering.BackgroundTasks.Extensions;
-    using Ordering.BackgroundTasks.Services;
+    using Ordering.BackgroundTasks.Tasks;
+    using System;
+    using HealthChecks.UI.Client;
 
     public class Startup
     {

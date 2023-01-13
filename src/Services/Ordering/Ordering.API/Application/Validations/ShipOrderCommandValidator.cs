@@ -1,11 +1,16 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Validations;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using Ordering.API.Application.Commands;
 
-public class ShipOrderCommandValidator : AbstractValidator<ShipOrderCommand>
+namespace Ordering.API.Application.Validations
 {
-    public ShipOrderCommandValidator(ILogger<ShipOrderCommandValidator> logger)
+    public class ShipOrderCommandValidator : AbstractValidator<ShipOrderCommand>
     {
-        RuleFor(order => order.OrderNumber).NotEmpty().WithMessage("No orderId found");
+        public ShipOrderCommandValidator(ILogger<ShipOrderCommandValidator> logger)
+        {
+            RuleFor(order => order.OrderNumber).NotEmpty().WithMessage("No orderId found");
 
-        logger.LogTrace("----- INSTANCE CREATED - {ClassName}", GetType().Name);
+            logger.LogTrace("----- INSTANCE CREATED - {ClassName}", GetType().Name);
+        }
     }
 }

@@ -1,17 +1,14 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
-
-namespace Coupon.API.IntegrationEvents.Events
+﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
-    public record OrderCouponRejectedIntegrationEvent : IntegrationEvent
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+    using Newtonsoft.Json;
+
+    public record OrderCouponRejectedIntegrationEvent(int IntegrationEventOrderId, string CouponCode) : IntegrationEvent
     {
-        public int OrderId { get; }
+        [JsonProperty]
+        public int OrderId { get; private set; }
 
-        public string Code { get; }
-
-        public OrderCouponRejectedIntegrationEvent(int orderId, string code)
-        {
-            OrderId = orderId;
-            Code = code;
-        }
+        [JsonProperty]
+        public string Code { get; private set; }
     }
 }

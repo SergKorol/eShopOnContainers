@@ -115,12 +115,17 @@ public class ValueObjectTests
         public ComplexObject D { get; }
         public string NotAnEqualityComponent { get; }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        protected IEnumerable<object> GetEqualityComponents()
         {
             yield return A;
             yield return B;
             yield return C;
             yield return D;
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -138,7 +143,7 @@ public class ValueObjectTests
 
         public List<int> C { get; }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        protected IEnumerable<object> GetEqualityComponents()
         {
             yield return A;
             yield return B;
@@ -147,6 +152,11 @@ public class ValueObjectTests
             {
                 yield return c;
             }
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            throw new NotImplementedException();
         }
     }
 

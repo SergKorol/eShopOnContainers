@@ -132,6 +132,7 @@ export class BasketService {
         basketCheckout.cardholdername = order.cardholdername;
         basketCheckout.coupon = order.coupon;
         basketCheckout.discount = order.discount;
+        basketCheckout.balance = order.balance;
         basketCheckout.total = 0;
         basketCheckout.expiration = order.expiration;
 

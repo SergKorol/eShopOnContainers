@@ -1,10 +1,13 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class HomeController : Controller
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Controllers
 {
-    // GET: /<controller>/
-    public IActionResult Index()
+    public class HomeController : Controller
     {
-        return new RedirectResult("~/swagger");
+        // GET: /<controller>/
+        public IActionResult Index()
+        {
+            return new RedirectResult("~/swagger");
+        }
     }
 }

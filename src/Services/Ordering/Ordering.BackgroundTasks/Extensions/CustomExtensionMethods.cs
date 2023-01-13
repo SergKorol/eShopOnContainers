@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Azure.Messaging.ServiceBus;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
@@ -53,9 +53,12 @@ namespace Ordering.BackgroundTasks.Extensions
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
-                    var serviceBusConnectionString = configuration["EventBusConnection"];
+                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    return new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+                    var serviceBusConnectionString = configuration["EventBusConnection"];
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+
+                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
 
                 services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
@@ -64,9 +67,8 @@ namespace Ordering.BackgroundTasks.Extensions
                     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
                     var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-                    string subscriptionName = configuration["SubscriptionClientName"];
 
-                    return new EventBusServiceBus(serviceBusPersisterConnection, logger, eventBusSubcriptionsManager, iLifetimeScope, subscriptionName);
+                    return new EventBusServiceBus(serviceBusPersisterConnection, logger, eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);
                 });
             }
             else
@@ -127,7 +129,7 @@ namespace Ordering.BackgroundTasks.Extensions
         public static ILoggingBuilder UseSerilog(this ILoggingBuilder builder, IConfiguration configuration)
         {
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-            var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            var logstashUrl = configuration["Serilog:LogstashUrl"];
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()

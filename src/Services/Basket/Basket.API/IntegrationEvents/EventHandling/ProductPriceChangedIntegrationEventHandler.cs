@@ -1,53 +1,64 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.EventHandling;
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
+using Microsoft.eShopOnContainers.Services.Basket.API.Model;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>
+namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.EventHandling
 {
-    private readonly ILogger<ProductPriceChangedIntegrationEventHandler> _logger;
-    private readonly IBasketRepository _repository;
-
-    public ProductPriceChangedIntegrationEventHandler(
-        ILogger<ProductPriceChangedIntegrationEventHandler> logger,
-        IBasketRepository repository)
+    public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+        private readonly ILogger<ProductPriceChangedIntegrationEventHandler> _logger;
+        private readonly IBasketRepository _repository;
 
-    public async Task Handle(ProductPriceChangedIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public ProductPriceChangedIntegrationEventHandler(
+            ILogger<ProductPriceChangedIntegrationEventHandler> logger,
+            IBasketRepository repository)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
-
-            var userIds = _repository.GetUsers();
-
-            foreach (var id in userIds)
-            {
-                var basket = await _repository.GetBasketAsync(id);
-
-                await UpdatePriceInBasketItems(@event.ProductId, @event.NewPrice, @event.OldPrice, basket);
-            }
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-    }
 
-    private async Task UpdatePriceInBasketItems(int productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
-    {
-        var itemsToUpdate = basket?.Items?.Where(x => x.ProductId == productId).ToList();
-
-        if (itemsToUpdate != null)
+        public async Task Handle(ProductPriceChangedIntegrationEvent @event)
         {
-            _logger.LogInformation("----- ProductPriceChangedIntegrationEventHandler - Updating items in basket for user: {BuyerId} ({@Items})", basket.BuyerId, itemsToUpdate);
-
-            foreach (var item in itemsToUpdate)
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
             {
-                if (item.UnitPrice == oldPrice)
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+
+                var userIds = _repository.GetUsers();
+
+                foreach (var id in userIds)
                 {
-                    var originalPrice = item.UnitPrice;
-                    item.UnitPrice = newPrice;
-                    item.OldUnitPrice = originalPrice;
+                    var basket = await _repository.GetBasketAsync(id);
+
+                    await UpdatePriceInBasketItems(@event.ProductId, @event.NewPrice, @event.OldPrice, basket);
                 }
             }
-            await _repository.UpdateBasketAsync(basket);
+        }
+
+        private async Task UpdatePriceInBasketItems(int productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
+        {
+            var itemsToUpdate = basket?.Items?.Where(x => x.ProductId == productId).ToList();
+
+            if (itemsToUpdate != null)
+            {
+                _logger.LogInformation("----- ProductPriceChangedIntegrationEventHandler - Updating items in basket for user: {BuyerId} ({@Items})", basket.BuyerId, itemsToUpdate);
+
+                foreach (var item in itemsToUpdate)
+                {
+                    if (item.UnitPrice == oldPrice)
+                    {
+                        var originalPrice = item.UnitPrice;
+                        item.UnitPrice = newPrice;
+                        item.OldUnitPrice = originalPrice;
+                    }
+                }
+                await _repository.UpdateBasketAsync(basket);
+            }
         }
     }
 }
+

@@ -12,6 +12,7 @@ import { SecurityService } from './services/security.service';
 import { ConfigurationService } from './services/configuration.service';
 import { StorageService } from './services/storage.service';
 import { SignalrService } from './services/signalr.service';
+import {PointsService} from "./services/points.service";
 
 // Components:
 import { Pager } from './components/pager/pager';
@@ -22,6 +23,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 // Pipes:
 import { UppercasePipe } from './pipes/uppercase.pipe';
+import { PointsComponent } from './components/points/points.component';
 
 @NgModule({
     imports: [
@@ -39,7 +41,8 @@ import { UppercasePipe } from './pipes/uppercase.pipe';
         Header,
         Identity,
         PageNotFoundComponent,
-        UppercasePipe
+        UppercasePipe,
+        PointsComponent
     ],
     exports: [
         // Modules
@@ -53,7 +56,8 @@ import { UppercasePipe } from './pipes/uppercase.pipe';
         Header,
         Identity,
         PageNotFoundComponent,
-        UppercasePipe
+        UppercasePipe,
+        PointsComponent
     ]
 })
 export class SharedModule {
@@ -67,7 +71,8 @@ export class SharedModule {
                 SecurityService, 
                 ConfigurationService, 
                 StorageService,
-                SignalrService
+                SignalrService,
+                PointsService
             ]
         };
     }

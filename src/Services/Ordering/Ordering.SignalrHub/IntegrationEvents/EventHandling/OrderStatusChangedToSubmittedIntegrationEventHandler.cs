@@ -1,29 +1,40 @@
-namespace Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.EventHandling;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.Extensions.Logging;
+using Ordering.SignalrHub.IntegrationEvents.Events;
+using Serilog.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class OrderStatusChangedToSubmittedIntegrationEventHandler :
-    IIntegrationEventHandler<OrderStatusChangedToSubmittedIntegrationEvent>
+namespace Ordering.SignalrHub.IntegrationEvents.EventHandling
 {
-    private readonly IHubContext<NotificationsHub> _hubContext;
-    private readonly ILogger<OrderStatusChangedToSubmittedIntegrationEventHandler> _logger;
-
-    public OrderStatusChangedToSubmittedIntegrationEventHandler(
-        IHubContext<NotificationsHub> hubContext,
-        ILogger<OrderStatusChangedToSubmittedIntegrationEventHandler> logger)
+    public class OrderStatusChangedToSubmittedIntegrationEventHandler :
+        IIntegrationEventHandler<OrderStatusChangedToSubmittedIntegrationEvent>
     {
-        _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly ILogger<OrderStatusChangedToSubmittedIntegrationEventHandler> _logger;
 
-
-    public async Task Handle(OrderStatusChangedToSubmittedIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public OrderStatusChangedToSubmittedIntegrationEventHandler(
+            IHubContext<NotificationsHub> hubContext,
+            ILogger<OrderStatusChangedToSubmittedIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-            await _hubContext.Clients
-                .Group(@event.BuyerName)
-                .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
+
+        public async Task Handle(OrderStatusChangedToSubmittedIntegrationEvent @event)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+            {
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+
+                await _hubContext.Clients
+                    .Group(@event.BuyerName)
+                    .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
+            }
         }
     }
 }

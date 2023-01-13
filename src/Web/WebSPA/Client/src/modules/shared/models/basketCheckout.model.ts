@@ -15,4 +15,5 @@
     coupon: string;
     total: number;
     discount: number;
+    balance: number;
 }

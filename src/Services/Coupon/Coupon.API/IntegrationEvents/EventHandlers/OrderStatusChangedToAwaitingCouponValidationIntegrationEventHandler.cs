@@ -2,6 +2,7 @@
 using Coupon.API.IntegrationEvents.Events;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+using Ordering.API.Application.IntegrationEvents.Events;
 using Serilog;
 using Serilog.Context;
 
@@ -20,6 +21,7 @@ namespace Coupon.API.IntegrationEvents.EventHandlers
 
         public async Task Handle(OrderStatusChangedToAwaitingCouponValidationIntegrationEvent @event)
         {
+            Log.Error($"MY EVENT. DISCOUNT: {@event.Code}, Name: {@event.BuyerName}");
             await Task.Delay(3000);
 
             using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-Coupon.API"))

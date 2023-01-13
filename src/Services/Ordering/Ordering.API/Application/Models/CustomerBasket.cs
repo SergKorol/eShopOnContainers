@@ -1,13 +1,19 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class CustomerBasket
+namespace Ordering.API.Application.Models
 {
-    public string BuyerId { get; set; }
-    public List<BasketItem> Items { get; set; }
-
-    public CustomerBasket(string buyerId, List<BasketItem> items)
+    public class CustomerBasket
     {
-        BuyerId = buyerId;
-        Items = items;
+        public string BuyerId { get; set; }
+        public List<BasketItem> Items { get; set; }
+
+        public CustomerBasket(string customerId)
+        {
+            BuyerId = customerId;
+            Items = new List<BasketItem>();
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿global using System;
-global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models;
 global using MediatR;
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
 global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
@@ -18,6 +17,4 @@ global using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queri
 global using Microsoft.eShopOnContainers.Services.Ordering.API.Controllers;
 global using System.Linq;
 global using Microsoft.eShopOnContainers.Services.Ordering.Domain.SeedWork;
-global using Microsoft.eShopOnContainers.Services.Ordering.Domain.Exceptions;
-global using Microsoft.eShopOnContainers.Services.Ordering.Domain.Events;
 global using UnitTest.Ordering;

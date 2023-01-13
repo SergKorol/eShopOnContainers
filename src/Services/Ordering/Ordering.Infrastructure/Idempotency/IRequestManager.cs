@@ -1,8 +1,12 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
+﻿using System;
+using System.Threading.Tasks;
 
-public interface IRequestManager
+namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency
 {
-    Task<bool> ExistAsync(Guid id);
+    public interface IRequestManager
+    {
+        Task<bool> ExistAsync(Guid id);
 
-    Task CreateRequestForCommandAsync<T>(Guid id);
+        Task CreateRequestForCommandAsync<T>(Guid id);
+    }
 }

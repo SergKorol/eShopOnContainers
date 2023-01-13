@@ -1,32 +1,44 @@
-﻿using Autofac;
-using Coupon.API.Dtos;
-using Coupon.API.Filters;
-using Coupon.API.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using RabbitMQ.Client;
+﻿using Coupon.API.Infrastructure.Repositories.Point;
 
 namespace Coupon.API.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using Autofac;
+    using Coupon.API.Dtos;
+    using Coupon.API.Filters;
+    using Coupon.API.Infrastructure.Models;
+    using Coupon.API.Infrastructure.Repositories;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.ServiceBus;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Diagnostics.HealthChecks;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.OpenApi.Models;
+    using RabbitMQ.Client;
+
     public static class IServiceCollectionExtensions
     {
         public static IServiceCollection AddCouponRegister(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<ICouponRepository, CouponRepository>()
-                .AddTransient<IServiceBusPersisterConnection, DefaultServiceBusPersisterConnection>(service => new DefaultServiceBusPersisterConnection(configuration["EventBusConnection"]))
+                .AddTransient<IPointRepository, PointRepository>()
+                .AddTransient<IServiceBusPersisterConnection, DefaultServiceBusPersisterConnection>(service =>
+                {
+                    var connection = new ServiceBusConnectionStringBuilder(configuration["EventBusConnection"]);
+
+                    return new DefaultServiceBusPersisterConnection(connection, service.GetService<ILogger<DefaultServiceBusPersisterConnection>>());
+                })
                 .AddTransient<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>(service =>
                 {
-                    var factory = new ConnectionFactory
+                    var factory = new ConnectionFactory()
                     {
                         HostName = configuration["EventBusConnection"],
                         DispatchConsumersAsync = true
@@ -43,7 +55,9 @@ namespace Coupon.API.Extensions
                 })
                 .AddTransient<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>()
                 .AddTransient<CouponContext>()
-                .AddTransient<IMapper<CouponDto, Infrastructure.Models.Coupon>, Mapper>();
+                .AddTransient<IMapper<CouponDto, Coupon>, Mapper>()
+                .AddTransient<PointContext>()
+                .AddTransient<IMapper<PointDto, Point>, PointMapper>();
 
             return services;
         }
@@ -62,13 +76,13 @@ namespace Coupon.API.Extensions
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
+                    Flows = new OpenApiOAuthFlows()
                     {
-                        Implicit = new OpenApiOAuthFlow
+                        Implicit = new OpenApiOAuthFlow()
                         {
                             AuthorizationUrl = new Uri($"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize"),
                             TokenUrl = new Uri($"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/token"),
-                            Scopes = new Dictionary<string, string>
+                            Scopes = new Dictionary<string, string>()
                             {
                                 { "coupon", "Coupon API" }
                             }
@@ -85,6 +99,7 @@ namespace Coupon.API.Extensions
         public static IServiceCollection AddCustomSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<CouponSettings>(configuration);
+            services.Configure<PointSettings>(configuration);
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
@@ -119,7 +134,7 @@ namespace Coupon.API.Extensions
                     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
                     var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-                    return new EventBusServiceBus(serviceBusPersisterConnection, logger, eventBusSubcriptionsManager, iLifetimeScope, subscriptionClientName);
+                    return new EventBusServiceBus(serviceBusPersisterConnection, logger, eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);
                 });
             }
             else
@@ -156,7 +171,7 @@ namespace Coupon.API.Extensions
                 .AddMongoDb(
                     configuration["ConnectionString"],
                     name: "CouponCollection-check",
-                    tags: new[] { "couponcollection" });
+                    tags: new string[] { "couponcollection" });
 
             if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
@@ -164,14 +179,14 @@ namespace Coupon.API.Extensions
                     configuration["EventBusConnection"],
                     topicName: "eshop_event_bus",
                     name: "coupon-servicebus-check",
-                    tags: new[] { "servicebus" });
+                    tags: new string[] { "servicebus" });
             }
             else
             {
                 hcBuilder.AddRabbitMQ(
                     $"amqp://{configuration["EventBusConnection"]}",
                     name: "coupon-rabbitmqbus-check",
-                    tags: new[] { "rabbitmqbus" });
+                    tags: new string[] { "rabbitmqbus" });
             }
 
             return services;
@@ -182,7 +197,7 @@ namespace Coupon.API.Extensions
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.SetIsOriginAllowed(host => true)
+                    builder => builder.SetIsOriginAllowed((host) => true)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());

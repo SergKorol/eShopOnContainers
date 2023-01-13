@@ -1,8 +1,11 @@
-﻿namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.Events;
-
-public record OrderPaymentFailedIntegrationEvent : IntegrationEvent
+﻿namespace Payment.API.IntegrationEvents.Events
 {
-    public int OrderId { get; }
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 
-    public OrderPaymentFailedIntegrationEvent(int orderId) => OrderId = orderId;
+    public record OrderPaymentFailedIntegrationEvent : IntegrationEvent
+    {
+        public int OrderId { get; }
+
+        public OrderPaymentFailedIntegrationEvent(int orderId) => OrderId = orderId;
+    }
 }

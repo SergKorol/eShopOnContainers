@@ -1,52 +1,68 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.Seedwork;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class BuyerRepository
-    : IBuyerRepository
+namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Repositories
 {
-    private readonly OrderingContext _context;
-    public IUnitOfWork UnitOfWork => _context;
-
-    public BuyerRepository(OrderingContext context)
+    public class BuyerRepository
+        : IBuyerRepository
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
-
-    public Buyer Add(Buyer buyer)
-    {
-        if (buyer.IsTransient())
+        private readonly OrderingContext _context;
+        public IUnitOfWork UnitOfWork
         {
-            return _context.Buyers
-                .Add(buyer)
-                .Entity;
+            get
+            {
+                return _context;
+            }
         }
 
-        return buyer;
-    }
+        public BuyerRepository(OrderingContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
 
-    public Buyer Update(Buyer buyer)
-    {
-        return _context.Buyers
-                .Update(buyer)
-                .Entity;
-    }
+        public Buyer Add(Buyer buyer)
+        {
+            if (buyer.IsTransient())
+            {
+                return _context.Buyers
+                    .Add(buyer)
+                    .Entity;
+            }
+            else
+            {
+                return buyer;
+            }           
+        }
 
-    public async Task<Buyer> FindAsync(string identity)
-    {
-        var buyer = await _context.Buyers
-            .Include(b => b.PaymentMethods)
-            .Where(b => b.IdentityGuid == identity)
-            .SingleOrDefaultAsync();
+        public Buyer Update(Buyer buyer)
+        {
+            return _context.Buyers
+                    .Update(buyer)
+                    .Entity;
+        }
 
-        return buyer;
-    }
+        public async Task<Buyer> FindAsync(string identity)
+        {
+            var buyer = await _context.Buyers
+                .Include(b => b.PaymentMethods)
+                .Where(b => b.IdentityGuid == identity)
+                .SingleOrDefaultAsync();
 
-    public async Task<Buyer> FindByIdAsync(string id)
-    {
-        var buyer = await _context.Buyers
-            .Include(b => b.PaymentMethods)
-            .Where(b => b.Id == int.Parse(id))
-            .SingleOrDefaultAsync();
+            return buyer;
+        }
 
-        return buyer;
+        public async Task<Buyer> FindByIdAsync(string id)
+        {
+            var buyer = await _context.Buyers
+                .Include(b => b.PaymentMethods)
+                .Where(b => b.Id == int.Parse(id))
+                .SingleOrDefaultAsync();
+
+            return buyer;
+        }
     }
 }

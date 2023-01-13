@@ -9,7 +9,7 @@ namespace Coupon.API.Infrastructure.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public int Discount { get; set; }
+        public decimal Discount { get; set; }
 
         public string Code { get; set; }
 

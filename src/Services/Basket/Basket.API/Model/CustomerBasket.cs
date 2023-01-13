@@ -1,19 +1,21 @@
-namespace Microsoft.eShopOnContainers.Services.Basket.API.Model;
+﻿using System.Collections.Generic;
 
-public class CustomerBasket
+namespace Microsoft.eShopOnContainers.Services.Basket.API.Model
 {
-    public string BuyerId { get; set; }
-
-    public List<BasketItem> Items { get; set; } = new();
-
-    public CustomerBasket()
+    public class CustomerBasket
     {
+        public string BuyerId { get; set; }
 
-    }
+        public List<BasketItem> Items { get; set; } = new List<BasketItem>();
 
-    public CustomerBasket(string customerId)
-    {
-        BuyerId = customerId;
+        public CustomerBasket()
+        {
+
+        }
+
+        public CustomerBasket(string customerId)
+        {
+            BuyerId = customerId;
+        }
     }
 }
-
