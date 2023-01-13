@@ -1,4 +1,4 @@
-﻿using Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents;
+﻿using Ordering.API.Application.Models;
 
 namespace UnitTest.Ordering.Application;
 
@@ -60,7 +60,7 @@ public class NewOrderRequestHandlerTest
 
     private Order FakeOrder()
     {
-        return new Order("1", "fakeName", new Address("street", "city", "state", "country", "zipcode"), 1, "12", "111", "fakeName", DateTime.Now.AddYears(1));
+        return new Order("1", "fakeName", new Address("street", "city", "state", "country", "zipcode"), 1, "12", "111", "fakeName", DateTime.Now.AddYears(1), "DISC-10", 10, 200);
     }
 
     private CreateOrderCommand FakeOrderRequestWithBuyer(Dictionary<string, object> args = null)
@@ -78,6 +78,10 @@ public class NewOrderRequestHandlerTest
             cardExpiration: args != null && args.ContainsKey("cardExpiration") ? (DateTime)args["cardExpiration"] : DateTime.MinValue,
             cardSecurityNumber: args != null && args.ContainsKey("cardSecurityNumber") ? (string)args["cardSecurityNumber"] : "123",
             cardHolderName: args != null && args.ContainsKey("cardHolderName") ? (string)args["cardHolderName"] : "XXX",
-            cardTypeId: args != null && args.ContainsKey("cardTypeId") ? (int)args["cardTypeId"] : 0);
+            cardTypeId: args != null && args.ContainsKey("cardTypeId") ? (int)args["cardTypeId"] : 0,
+            codeDiscount: args != null && args.ContainsKey("codeDiscount") ? (string)args["codeDiscount"] : "DISC-5",
+            discount: args != null && args.ContainsKey("discount") ? (int)args["discount"] : 0
+            // balance: args != null && args.ContainsKey("balance") ? (int)args["balance"] : 0
+            );
     }
 }

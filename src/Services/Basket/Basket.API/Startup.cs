@@ -1,3 +1,5 @@
+using Microsoft.Azure.ServiceBus;
+
 namespace Microsoft.eShopOnContainers.Services.Basket.API;
 public class Startup
 {
@@ -81,9 +83,10 @@ public class Startup
         {
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
+                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
                 var serviceBusConnectionString = Configuration["EventBusConnection"];
-
-                return new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+                var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
             });
         }
         else
@@ -246,7 +249,7 @@ public class Startup
                 string subscriptionName = Configuration["SubscriptionClientName"];
 
                 return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-                    eventBusSubscriptionsManager, iLifetimeScope, subscriptionName);
+                    eventBusSubscriptionsManager, subscriptionName, iLifetimeScope);
             });
         }
         else

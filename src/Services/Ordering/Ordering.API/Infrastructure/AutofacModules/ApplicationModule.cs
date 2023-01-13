@@ -1,38 +1,50 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.AutofacModules;
+﻿using Autofac;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
+using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Repositories;
+using System.Reflection;
 
-public class ApplicationModule
-    : Autofac.Module
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.AutofacModules
 {
 
-    public string QueriesConnectionString { get; }
-
-    public ApplicationModule(string qconstr)
-    {
-        QueriesConnectionString = qconstr;
-
-    }
-
-    protected override void Load(ContainerBuilder builder)
+    public class ApplicationModule
+        :Autofac.Module
     {
 
-        builder.Register(c => new OrderQueries(QueriesConnectionString))
-            .As<IOrderQueries>()
-            .InstancePerLifetimeScope();
+        public string QueriesConnectionString { get; }
 
-        builder.RegisterType<BuyerRepository>()
-            .As<IBuyerRepository>()
-            .InstancePerLifetimeScope();
+        public ApplicationModule(string qconstr)
+        {
+            QueriesConnectionString = qconstr;
 
-        builder.RegisterType<OrderRepository>()
-            .As<IOrderRepository>()
-            .InstancePerLifetimeScope();
+        }
 
-        builder.RegisterType<RequestManager>()
-            .As<IRequestManager>()
-            .InstancePerLifetimeScope();
+        protected override void Load(ContainerBuilder builder)
+        {
 
-        builder.RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).GetTypeInfo().Assembly)
-            .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+            builder.Register(c => new OrderQueries(QueriesConnectionString))
+                .As<IOrderQueries>()
+                .InstancePerLifetimeScope();
 
+            builder.RegisterType<BuyerRepository>()
+                .As<IBuyerRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<OrderRepository>()
+                .As<IOrderRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<RequestManager>()
+               .As<IRequestManager>()
+               .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+
+        }
     }
 }

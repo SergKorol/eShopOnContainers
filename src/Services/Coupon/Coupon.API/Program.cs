@@ -1,9 +1,8 @@
-using System.Net.Mime;
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Coupon.API.Extensions;
 using Coupon.API.Infrastructure;
 using Coupon.API.Infrastructure.Repositories;
+using Coupon.API.Infrastructure.Repositories.Point;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +17,7 @@ namespace Coupon.API
             CreateHostBuilder(args)
                 .Build()
                 .SeedDatabaseStrategy<CouponContext>(context => new CouponSeed().SeedAsync(context).Wait())
+                .SeedDatabaseStrategy<PointContext>(context => new PointSeed().SeedAsync(context).Wait())
                 .SubscribersIntegrationEvents()
                 .Run();
 

@@ -1,21 +1,27 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.EntityConfigurations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
 
-class CardTypeEntityTypeConfiguration
-    : IEntityTypeConfiguration<CardType>
+namespace Ordering.Infrastructure.EntityConfigurations
 {
-    public void Configure(EntityTypeBuilder<CardType> cardTypesConfiguration)
+    class CardTypeEntityTypeConfiguration
+        : IEntityTypeConfiguration<CardType>
     {
-        cardTypesConfiguration.ToTable("cardtypes", OrderingContext.DEFAULT_SCHEMA);
+        public void Configure(EntityTypeBuilder<CardType> cardTypesConfiguration)
+        {
+            cardTypesConfiguration.ToTable("cardtypes", OrderingContext.DEFAULT_SCHEMA);
 
-        cardTypesConfiguration.HasKey(ct => ct.Id);
+            cardTypesConfiguration.HasKey(ct => ct.Id);
 
-        cardTypesConfiguration.Property(ct => ct.Id)
-            .HasDefaultValue(1)
-            .ValueGeneratedNever()
-            .IsRequired();
+            cardTypesConfiguration.Property(ct => ct.Id)
+                .HasDefaultValue(1)
+                .ValueGeneratedNever()
+                .IsRequired();
 
-        cardTypesConfiguration.Property(ct => ct.Name)
-            .HasMaxLength(200)
-            .IsRequired();
+            cardTypesConfiguration.Property(ct => ct.Name)
+                .HasMaxLength(200)
+                .IsRequired();
+        }
     }
 }

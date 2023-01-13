@@ -1,21 +1,29 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Services;
+﻿
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class IdentityService : IIdentityService
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Services
 {
-    private IHttpContextAccessor _context;
-
-    public IdentityService(IHttpContextAccessor context)
+    public class IdentityService : IIdentityService
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+        private IHttpContextAccessor _context; 
 
-    public string GetUserIdentity()
-    {
-        return _context.HttpContext.User.FindFirst("sub").Value;
-    }
+        public IdentityService(IHttpContextAccessor context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
 
-    public string GetUserName()
-    {
-        return _context.HttpContext.User.Identity.Name;
+        public string GetUserIdentity()
+        {
+            return _context.HttpContext.User.FindFirst("sub").Value;
+        }
+
+        public string GetUserName()
+        {
+            return _context.HttpContext.User.Identity.Name;
+        }
     }
 }

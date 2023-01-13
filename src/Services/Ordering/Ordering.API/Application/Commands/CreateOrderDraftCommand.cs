@@ -1,16 +1,27 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
-using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Models;
+﻿using MediatR;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Ordering.API.Application.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using static Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
-public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
 {
-
-    public string BuyerId { get; private set; }
-
-    public IEnumerable<BasketItem> Items { get; private set; }
-
-    public CreateOrderDraftCommand(string buyerId, IEnumerable<BasketItem> items)
+    public class CreateOrderDraftCommand :  IRequest<OrderDraftDTO>
     {
-        BuyerId = buyerId;
-        Items = items;
+       
+        public string BuyerId { get; private set; }
+
+        public IEnumerable<BasketItem> Items { get; private set; }
+
+        public CreateOrderDraftCommand(string buyerId, IEnumerable<BasketItem> items)
+        {
+            BuyerId = buyerId;
+            Items = items;
+        }
     }
+
 }

@@ -1,10 +1,13 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Basket.API.Model;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public interface IBasketRepository
+namespace Microsoft.eShopOnContainers.Services.Basket.API.Model
 {
-    Task<CustomerBasket> GetBasketAsync(string customerId);
-    IEnumerable<string> GetUsers();
-    Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
-    Task<bool> DeleteBasketAsync(string id);
+    public interface IBasketRepository
+    {
+        Task<CustomerBasket> GetBasketAsync(string customerId);
+        IEnumerable<string> GetUsers();
+        Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
+        Task<bool> DeleteBasketAsync(string id);
+    }
 }
-

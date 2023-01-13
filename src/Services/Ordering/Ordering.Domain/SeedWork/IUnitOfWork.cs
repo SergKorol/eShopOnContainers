@@ -1,7 +1,12 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.Seedwork;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-public interface IUnitOfWork : IDisposable
+namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.Seedwork
 {
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-    Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    public interface IUnitOfWork : IDisposable
+    {        
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    }
 }

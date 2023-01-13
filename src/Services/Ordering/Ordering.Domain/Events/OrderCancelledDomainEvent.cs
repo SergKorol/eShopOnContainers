@@ -1,12 +1,18 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.Events;
+﻿using MediatR;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-public class OrderCancelledDomainEvent : INotification
+namespace Ordering.Domain.Events
 {
-    public Order Order { get; }
-
-    public OrderCancelledDomainEvent(Order order)
+    public class OrderCancelledDomainEvent : INotification
     {
-        Order = order;
+        public Order Order { get; }
+
+        public OrderCancelledDomainEvent(Order order)
+        {
+            Order = order;
+        }
     }
 }
-

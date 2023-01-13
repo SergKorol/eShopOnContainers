@@ -1,4 +1,7 @@
-﻿namespace Ordering.UnitTests.Domain;
+﻿using Ordering.Domain.Events;
+using Ordering.Domain.Exceptions;
+
+namespace Ordering.UnitTests.Domain;
 
 using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 public class OrderAggregateTest
@@ -116,10 +119,13 @@ public class OrderAggregateTest
         var cardSecurityNumber = "123";
         var cardHolderName = "FakeName";
         var cardExpiration = DateTime.Now.AddYears(1);
+        var discountCode = "DISC-10";
+        var discount = 10;
+        var balance = 200;
         var expectedResult = 1;
 
         //Act 
-        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
+        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration, discountCode, discount,balance);
 
         //Assert
         Assert.Equal(fakeOrder.DomainEvents.Count, expectedResult);
@@ -139,10 +145,13 @@ public class OrderAggregateTest
         var cardSecurityNumber = "123";
         var cardHolderName = "FakeName";
         var cardExpiration = DateTime.Now.AddYears(1);
+        var discountCode = "DISC-10";
+        var discount = 10;
+        var balance = 200;
         var expectedResult = 2;
 
         //Act 
-        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
+        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration, discountCode, discount,balance);
         fakeOrder.AddDomainEvent(new OrderStartedDomainEvent(fakeOrder, "fakeName", "1", cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration));
         //Assert
         Assert.Equal(fakeOrder.DomainEvents.Count, expectedResult);
@@ -162,7 +171,10 @@ public class OrderAggregateTest
         var cardSecurityNumber = "123";
         var cardHolderName = "FakeName";
         var cardExpiration = DateTime.Now.AddYears(1);
-        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
+        var discountCode = "DISC-10";
+        var discount = 10;
+        var balance = 200;
+        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration, discountCode, discount, balance);
         var @fakeEvent = new OrderStartedDomainEvent(fakeOrder, "1", "fakeName", cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
         var expectedResult = 1;
 

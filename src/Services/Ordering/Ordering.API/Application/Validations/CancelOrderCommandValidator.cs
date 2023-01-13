@@ -1,11 +1,16 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Validations;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using Ordering.API.Application.Commands;
 
-public class CancelOrderCommandValidator : AbstractValidator<CancelOrderCommand>
+namespace Ordering.API.Application.Validations
 {
-    public CancelOrderCommandValidator(ILogger<CancelOrderCommandValidator> logger)
+    public class CancelOrderCommandValidator : AbstractValidator<CancelOrderCommand>
     {
-        RuleFor(order => order.OrderNumber).NotEmpty().WithMessage("No orderId found");
+        public CancelOrderCommandValidator(ILogger<CancelOrderCommandValidator> logger)
+        {
+            RuleFor(order => order.OrderNumber).NotEmpty().WithMessage("No orderId found");
 
-        logger.LogTrace("----- INSTANCE CREATED - {ClassName}", GetType().Name);
+            logger.LogTrace("----- INSTANCE CREATED - {ClassName}", GetType().Name);
+        }
     }
 }

@@ -1,38 +1,53 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
-public class OrderStockRejectedIntegrationEventHandler : IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>
+﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling
 {
-    private readonly IMediator _mediator;
-    private readonly ILogger<OrderStockRejectedIntegrationEventHandler> _logger;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+    using System.Threading.Tasks;
+    using Events;
+    using System.Linq;
+    using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+    using MediatR;
+    using Ordering.API.Application.Commands;
+    using Microsoft.Extensions.Logging;
+    using Serilog.Context;
+    using Microsoft.eShopOnContainers.Services.Ordering.API;
+    using Ordering.API.Application.Behaviors;
 
-    public OrderStockRejectedIntegrationEventHandler(
-        IMediator mediator,
-        ILogger<OrderStockRejectedIntegrationEventHandler> logger)
+    public class OrderStockRejectedIntegrationEventHandler : IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>
     {
-        _mediator = mediator;
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
-    }
+        private readonly IMediator _mediator;
+        private readonly ILogger<OrderStockRejectedIntegrationEventHandler> _logger;
 
-    public async Task Handle(OrderStockRejectedIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public OrderStockRejectedIntegrationEventHandler(
+            IMediator mediator,
+            ILogger<OrderStockRejectedIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _mediator = mediator;
+            _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+        }
 
-            var orderStockRejectedItems = @event.OrderStockItems
-                .FindAll(c => !c.HasStock)
-                .Select(c => c.ProductId)
-                .ToList();
+        public async Task Handle(OrderStockRejectedIntegrationEvent @event)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+            {
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
 
-            var command = new SetStockRejectedOrderStatusCommand(@event.OrderId, orderStockRejectedItems);
+                var orderStockRejectedItems = @event.OrderStockItems
+                    .FindAll(c => !c.HasStock)
+                    .Select(c => c.ProductId)
+                    .ToList();
 
-            _logger.LogInformation(
-                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                command.GetGenericTypeName(),
-                nameof(command.OrderNumber),
-                command.OrderNumber,
-                command);
+                var command = new SetStockRejectedOrderStatusCommand(@event.OrderId, orderStockRejectedItems);
 
-            await _mediator.Send(command);
+                _logger.LogInformation(
+                    "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                    command.GetGenericTypeName(),
+                    nameof(command.OrderNumber),
+                    command.OrderNumber,
+                    command);
+
+                await _mediator.Send(command);
+            }
         }
     }
 }

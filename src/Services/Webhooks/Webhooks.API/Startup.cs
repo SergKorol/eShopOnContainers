@@ -1,3 +1,5 @@
+using Microsoft.Azure.ServiceBus;
+
 namespace Webhooks.API;
 public class Startup
 {
@@ -181,7 +183,7 @@ internal static class CustomExtensionMethods
                 string subscriptionName = configuration["SubscriptionClientName"];
 
                 return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-                    eventBusSubscriptionManager, iLifetimeScope, subscriptionName);
+                    eventBusSubscriptionManager, subscriptionName, iLifetimeScope);
             });
 
         }
@@ -245,10 +247,19 @@ internal static class CustomExtensionMethods
 
             if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
+                // services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+                // {
+                //     var subscriptionClientName = configuration["SubscriptionClientName"];
+                //     return new DefaultServiceBusPersisterConnection(configuration["EventBusConnection"]);
+                // });
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
-                    var subscriptionClientName = configuration["SubscriptionClientName"];
-                    return new DefaultServiceBusPersisterConnection(configuration["EventBusConnection"]);
+                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+
+                    var serviceBusConnectionString = configuration["SubscriptionClientName"];
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+
+                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
             }
             else

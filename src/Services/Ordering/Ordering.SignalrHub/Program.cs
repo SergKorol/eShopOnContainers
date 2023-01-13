@@ -1,4 +1,6 @@
-﻿var configuration = GetConfiguration();
+﻿using Ordering.SignalrHub;
+
+var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
 

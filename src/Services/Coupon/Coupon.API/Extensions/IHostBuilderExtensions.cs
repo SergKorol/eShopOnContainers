@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Coupon.API.IntegrationEvents.EventHandlers;
 using Coupon.API.IntegrationEvents.Events;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
@@ -17,7 +17,7 @@ namespace Coupon.API.Extensions
                 var context = scope.ServiceProvider.GetService<TContext>();
 
                 var policy = Policy.Handle<SqlException>()
-                    .WaitAndRetry(new[]
+                    .WaitAndRetry(new TimeSpan[]
                     {
                         TimeSpan.FromSeconds(3),
                         TimeSpan.FromSeconds(5),

@@ -10,4 +10,8 @@
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="AggregatesModel\.DS_Store" />
+  </ItemGroup>
+
 </Project>

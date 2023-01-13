@@ -1,68 +1,82 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+﻿using System;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+using Microsoft.eShopOnContainers.Services.Ordering.API;
+using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+using Microsoft.Extensions.Logging;
+using Ordering.API.Application.IntegrationEvents.Events;
+using Serilog.Context;
 
-public class UserCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>
+namespace Ordering.API.Application.IntegrationEvents.EventHandling
 {
-    private readonly IMediator _mediator;
-    private readonly ILogger<UserCheckoutAcceptedIntegrationEventHandler> _logger;
-
-    public UserCheckoutAcceptedIntegrationEventHandler(
-        IMediator mediator,
-        ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger)
+    public class UserCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IMediator _mediator;
+        private readonly ILogger<UserCheckoutAcceptedIntegrationEventHandler> _logger;
 
-    /// <summary>
-    /// Integration event handler which starts the create order process
-    /// </summary>
-    /// <param name="@event">
-    /// Integration event message which is sent by the
-    /// basket.api once it has successfully process the 
-    /// order items.
-    /// </param>
-    /// <returns></returns>
-    public async Task Handle(UserCheckoutAcceptedIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public UserCheckoutAcceptedIntegrationEventHandler(
+            IMediator mediator,
+            ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-            var result = false;
-
-            if (@event.RequestId != Guid.Empty)
+        /// <summary>
+        /// Integration event handler which starts the create order process
+        /// </summary>
+        /// <param name="@event">
+        /// Integration event message which is sent by the
+        /// basket.api once it has successfully process the 
+        /// order items.
+        /// </param>
+        /// <returns></returns>
+        public async Task Handle(UserCheckoutAcceptedIntegrationEvent integrationEvent)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{integrationEvent.Id}-{Program.AppName}"))
             {
-                using (LogContext.PushProperty("IdentifiedCommandId", @event.RequestId))
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", integrationEvent.Id, Program.AppName, integrationEvent);
+
+                var result = false;
+
+                if (integrationEvent.RequestId != Guid.Empty)
                 {
-                    var createOrderCommand = new CreateOrderCommand(@event.Basket.Items, @event.UserId, @event.UserName, @event.City, @event.Street,
-                        @event.State, @event.Country, @event.ZipCode,
-                        @event.CardNumber, @event.CardHolderName, @event.CardExpiration,
-                        @event.CardSecurityNumber, @event.CardTypeId);
-
-                    var requestCreateOrder = new IdentifiedCommand<CreateOrderCommand, bool>(createOrderCommand, @event.RequestId);
-
-                    _logger.LogInformation(
-                        "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                        requestCreateOrder.GetGenericTypeName(),
-                        nameof(requestCreateOrder.Id),
-                        requestCreateOrder.Id,
-                        requestCreateOrder);
-
-                    result = await _mediator.Send(requestCreateOrder);
-
-                    if (result)
+                    using (LogContext.PushProperty("IdentifiedCommandId", integrationEvent.RequestId))
                     {
-                        _logger.LogInformation("----- CreateOrderCommand suceeded - RequestId: {RequestId}", @event.RequestId);
-                    }
-                    else
-                    {
-                        _logger.LogWarning("CreateOrderCommand failed - RequestId: {RequestId}", @event.RequestId);
+                        var createOrderCommand = new CreateOrderCommand(integrationEvent.Basket.Items,
+                            integrationEvent.UserId, integrationEvent.UserName, integrationEvent.City,
+                            integrationEvent.Street, integrationEvent.State, integrationEvent.Country,
+                            integrationEvent.ZipCode, integrationEvent.CardNumber, integrationEvent.CardHolderName,
+                            integrationEvent.CardExpiration, integrationEvent.CardSecurityNumber,
+                            integrationEvent.CardTypeId, integrationEvent.CodeDiscount, integrationEvent.Discount);
+
+                        var requestCreateOrder = new IdentifiedCommand<CreateOrderCommand, bool>(createOrderCommand, integrationEvent.RequestId);
+
+                        _logger.LogInformation(
+                            "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                            requestCreateOrder.GetGenericTypeName(),
+                            nameof(requestCreateOrder.Id),
+                            requestCreateOrder.Id,
+                            requestCreateOrder);
+
+                        result = await _mediator.Send(requestCreateOrder);
+
+                        if (result)
+                        {
+                            _logger.LogInformation("----- CreateOrderCommand suceeded - RequestId: {RequestId}", integrationEvent.RequestId);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("CreateOrderCommand failed - RequestId: {RequestId}", integrationEvent.RequestId);
+                        }
                     }
                 }
-            }
-            else
-            {
-                _logger.LogWarning("Invalid IntegrationEvent - RequestId is missing - {@IntegrationEvent}", @event);
+                else
+                {
+                    _logger.LogWarning("Invalid IntegrationEvent - RequestId is missing - {@IntegrationEvent}", integrationEvent);
+                }
             }
         }
     }

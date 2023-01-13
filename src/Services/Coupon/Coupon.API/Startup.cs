@@ -36,7 +36,10 @@ namespace Coupon.API
                 .AddSwagger(Configuration)
                 .AddCustomHealthCheck(Configuration);
 
-            services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
+            services
+                .AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>,
+                    OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
+            services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent>, OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventHandler>();
             services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
 
             services.AddSingleton(sp => new ExceptionTrigger());
@@ -90,6 +93,7 @@ namespace Coupon.API
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>>();
+            eventBus.Subscribe<OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent>>();
             eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
         }
     }

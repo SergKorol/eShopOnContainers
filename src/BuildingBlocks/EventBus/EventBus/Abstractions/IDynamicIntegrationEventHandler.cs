@@ -1,6 +1,13 @@
-﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
-public interface IDynamicIntegrationEventHandler
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions
 {
-    Task Handle(dynamic eventData);
+    public interface IDynamicIntegrationEventHandler
+    {
+        Task Handle(dynamic eventData);
+    }
 }

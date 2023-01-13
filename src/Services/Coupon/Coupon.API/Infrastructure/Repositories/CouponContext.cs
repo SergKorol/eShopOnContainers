@@ -17,7 +17,7 @@
                 throw new MongoConfigurationException("Cannot connect to the database. The connection string is not valid or the database is not accessible");
             }
 
-            _database = client.GetDatabase(settings.Value.CouponMongoDatabase);
+            _database = client.GetDatabase(settings.Value.MongoDatabase);
         }
 
         public IMongoCollection<Coupon>? Coupons => _database?.GetCollection<Coupon>("CouponCollection");

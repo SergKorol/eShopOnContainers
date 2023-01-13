@@ -1,13 +1,17 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+﻿using MediatR;
+using System;
 
-public class IdentifiedCommand<T, R> : IRequest<R>
-    where T : IRequest<R>
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
 {
-    public T Command { get; }
-    public Guid Id { get; }
-    public IdentifiedCommand(T command, Guid id)
+    public class IdentifiedCommand<T, R> : IRequest<R>
+        where T : IRequest<R>
     {
-        Command = command;
-        Id = id;
+        public T Command { get; }
+        public Guid Id { get; }
+        public IdentifiedCommand(T command, Guid id)
+        {
+            Command = command;
+            Id = id;
+        }
     }
 }

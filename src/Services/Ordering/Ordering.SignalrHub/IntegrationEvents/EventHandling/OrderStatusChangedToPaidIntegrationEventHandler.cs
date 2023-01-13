@@ -1,28 +1,37 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.EventHandling;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.Extensions.Logging;
+using Ordering.SignalrHub.IntegrationEvents.Events;
+using Serilog.Context;
+using System;
+using System.Threading.Tasks;
 
-public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
+namespace Ordering.SignalrHub.IntegrationEvents.EventHandling
 {
-    private readonly IHubContext<NotificationsHub> _hubContext;
-    private readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> _logger;
-
-    public OrderStatusChangedToPaidIntegrationEventHandler(
-        IHubContext<NotificationsHub> hubContext,
-        ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger)
+    public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
     {
-        _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> _logger;
 
-
-    public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public OrderStatusChangedToPaidIntegrationEventHandler(
+            IHubContext<NotificationsHub> hubContext,
+            ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-            await _hubContext.Clients
-                .Group(@event.BuyerName)
-                .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
+
+        public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+            {
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+
+                await _hubContext.Clients
+                    .Group(@event.BuyerName)
+                    .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
+            }
         }
     }
 }

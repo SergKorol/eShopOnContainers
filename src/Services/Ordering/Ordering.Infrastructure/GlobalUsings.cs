@@ -8,8 +8,6 @@ global using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesMode
 global using Microsoft.eShopOnContainers.Services.Ordering.Domain.Seedwork;
 global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
 global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
-global using Microsoft.eShopOnContainers.Services.Ordering.Domain.Exceptions;
-global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.EntityConfigurations;
 global using System.Data;
 global using System.Linq;
 global using System.Threading.Tasks;

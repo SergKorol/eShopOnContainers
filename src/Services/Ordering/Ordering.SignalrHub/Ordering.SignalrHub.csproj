@@ -36,4 +36,8 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="IntegrationEvents\.DS_Store" />
+  </ItemGroup>
+
 </Project>
