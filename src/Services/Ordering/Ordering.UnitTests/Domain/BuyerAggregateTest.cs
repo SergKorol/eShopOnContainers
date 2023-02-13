@@ -1,4 +1,6 @@
-﻿public class BuyerAggregateTest
+﻿using Ordering.Domain.Exceptions;
+
+public class BuyerAggregateTest
 {
     public BuyerAggregateTest()
     { }

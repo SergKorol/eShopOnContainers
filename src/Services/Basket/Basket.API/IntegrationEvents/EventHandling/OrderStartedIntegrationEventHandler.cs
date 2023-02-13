@@ -1,29 +1,38 @@
-﻿namespace Basket.API.IntegrationEvents.EventHandling;
+﻿using Basket.API.IntegrationEvents.Events;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.Services.Basket.API;
+using Microsoft.eShopOnContainers.Services.Basket.API.Model;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using System;
+using System.Threading.Tasks;
 
-public class OrderStartedIntegrationEventHandler : IIntegrationEventHandler<OrderStartedIntegrationEvent>
+namespace Basket.API.IntegrationEvents.EventHandling
 {
-    private readonly IBasketRepository _repository;
-    private readonly ILogger<OrderStartedIntegrationEventHandler> _logger;
-
-    public OrderStartedIntegrationEventHandler(
-        IBasketRepository repository,
-        ILogger<OrderStartedIntegrationEventHandler> logger)
+    public class OrderStartedIntegrationEventHandler : IIntegrationEventHandler<OrderStartedIntegrationEvent>
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IBasketRepository _repository;
+        private readonly ILogger<OrderStartedIntegrationEventHandler> _logger;
 
-    public async Task Handle(OrderStartedIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public OrderStartedIntegrationEventHandler(
+            IBasketRepository repository,
+            ILogger<OrderStartedIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-            await _repository.DeleteBasketAsync(@event.UserId.ToString());
+        public async Task Handle(OrderStartedIntegrationEvent @event)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+            {
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+
+                await _repository.DeleteBasketAsync(@event.UserId.ToString());
+            }
         }
     }
 }
-
 
 
 

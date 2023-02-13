@@ -1,0 +1,24 @@
+{{- $name := include "coupon-api.fullname" . -}}
+{{- $sqlsrv := include "sql-name" . -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "cfg-{{ $name }}"
+  labels:
+    app: {{ template "coupon-api.name" . }}
+    chart: {{ template "coupon-api.chart" .}}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_URLS: http://0.0.0.0:80
+  AzureServiceBusEnabled: "False"
+  CheckUpdateTime: "30000"
+  ConnectionString: mongodb://nosqldata
+  EventBusConnection: rabbitmq
+  identityUrl: http://identity-api
+  OrchestratorType: K8S
+  PATH_BASE: /coupon-api
+  Serilog__MinimumLevel__Override__coupon-api: Verbose
+  Serilog__MinimumLevel__Override__Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ: Verbose

@@ -1,3 +1,5 @@
+using Microsoft.Azure.ServiceBus;
+
 namespace Microsoft.eShopOnContainers.Services.Catalog.API;
 
 public class Startup
@@ -86,7 +88,7 @@ public class Startup
     protected virtual void ConfigureEventBus(IApplicationBuilder app)
     {
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-        eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+        eventBus.Subscribe<OrderStatusChangedToAwaitingStockValidationIntegrationEvent, OrderStatusChangedToAwaitingStockValidationIntegrationEventHandler>();
         eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
     }
 }
@@ -245,10 +247,10 @@ public static class CustomExtensionMethods
         {
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
+                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
                 var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
-                var serviceBusConnection = settings.EventBusConnection;
-
-                return new DefaultServiceBusPersisterConnection(serviceBusConnection);
+                var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
+                return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
             });
         }
         else
@@ -300,7 +302,7 @@ public static class CustomExtensionMethods
                 string subscriptionName = configuration["SubscriptionClientName"];
 
                 return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-                    eventBusSubcriptionsManager, iLifetimeScope, subscriptionName);
+                    eventBusSubcriptionsManager, subscriptionName, iLifetimeScope);
             });
 
         }
@@ -325,7 +327,7 @@ public static class CustomExtensionMethods
         }
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+        services.AddTransient<OrderStatusChangedToAwaitingStockValidationIntegrationEventHandler>();
         services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
         return services;

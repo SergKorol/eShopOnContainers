@@ -1,8 +1,11 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
+﻿using System;
 
-public class ClientRequest
+namespace Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public DateTime Time { get; set; }
+    public class ClientRequest
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public DateTime Time { get; set; }
+    }
 }

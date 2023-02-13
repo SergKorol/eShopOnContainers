@@ -1,4 +1,6 @@
-﻿var configuration = GetConfiguration();
+﻿using Payment.API;
+
+var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
 

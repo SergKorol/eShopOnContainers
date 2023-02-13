@@ -11,6 +11,7 @@
     <Content Update="web.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="IntegrationEvents\.DS_Store" />
   </ItemGroup>
 
   <ItemGroup>   

@@ -1,35 +1,49 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
-   
-public class OrderPaymentSucceededIntegrationEventHandler :
-    IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>
+﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling
 {
-    private readonly IMediator _mediator;
-    private readonly ILogger<OrderPaymentSucceededIntegrationEventHandler> _logger;
+    using MediatR;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+    using Microsoft.eShopOnContainers.Services.Ordering.API;
+    using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+    using Microsoft.Extensions.Logging;
+    using Ordering.API.Application.Behaviors;
+    using Ordering.API.Application.Commands;
+    using Ordering.API.Application.IntegrationEvents.Events;
+    using Serilog.Context;
+    using System;
+    using System.Threading.Tasks;
 
-    public OrderPaymentSucceededIntegrationEventHandler(
-        IMediator mediator,
-        ILogger<OrderPaymentSucceededIntegrationEventHandler> logger)
+    public class OrderPaymentSucceededIntegrationEventHandler : 
+        IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IMediator _mediator;
+        private readonly ILogger<OrderPaymentSucceededIntegrationEventHandler> _logger;
 
-    public async Task Handle(OrderPaymentSucceededIntegrationEvent @event)
-    {
-        using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+        public OrderPaymentSucceededIntegrationEventHandler(
+            IMediator mediator,
+            ILogger<OrderPaymentSucceededIntegrationEventHandler> logger)
         {
-            _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-            var command = new SetPaidOrderStatusCommand(@event.OrderId);
+        public async Task Handle(OrderPaymentSucceededIntegrationEvent @event)
+        {
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
+            {
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
 
-            _logger.LogInformation(
-                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                command.GetGenericTypeName(),
-                nameof(command.OrderNumber),
-                command.OrderNumber,
-                command);
+                var command = new SetPaidOrderStatusCommand(@event.OrderId);
 
-            await _mediator.Send(command);
+                _logger.LogInformation(
+                    "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                    command.GetGenericTypeName(),
+                    nameof(command.OrderNumber),
+                    command.OrderNumber,
+                    command);
+
+                await _mediator.Send(command);
+            }
         }
     }
 }

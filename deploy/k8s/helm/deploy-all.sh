@@ -25,9 +25,9 @@ Parameters:
   --image-push
     Upload images to the container registry (default is not pushing to the custom registry)
   -n | --app-name <the name of the app>
-    Specifies the name of the application (default: eshop).
+    Specifies the name of the application (default: tshape).
   --namespace <namespace name>
-    Specifies the namespace name to deploy the app. If it doesn't exists it will be created (default: eshop).
+    Specifies the namespace name to deploy the app. If it doesn't exists it will be created (default: tshape).
   -p | --docker-password <docker password>
     The Docker password used to logon to the custom registry, supplied using the -r parameter.
   -r | --registry <container registry>
@@ -54,14 +54,14 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-aut
 
 WARNING! THE SCRIPT WILL COMPLETELY DESTROY ALL DEPLOYMENTS AND SERVICES VISIBLE
 FROM THE CURRENT CONFIGURATION CONTEXT AND NAMESPACE.
-It is recommended that you check your selected namespace, 'eshop' by default, is already in use.
+It is recommended that you check your selected namespace, 'tshape' by default, is already in use.
 Every deployment and service done in the namespace will be deleted.
 For more information see https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
 
 END
 }
 
-app_name='eshop'
+app_name='tshape'
 aks_name=''
 aks_rg=''
 build_images=''
@@ -75,7 +75,7 @@ image_tag='latest'
 push_images=''
 skip_infrastructure=''
 use_local_k8s=''
-namespace='eshop'
+namespace='tshape'
 use_mesh='false'
 ingressMeshAnnotationsFile='ingress_values_linkerd.yaml'
 imagePullPolicy='Always'
@@ -160,14 +160,14 @@ if [[ $push_images ]]; then
   echo "#################### Pushing images to the container registry ####################"
   services=(basket.api catalog.api identity.api ordering.api payment.api webmvc webspa webstatus)
 
-  if [[ -z "$(docker image ls -q --filter=reference=eshop/$service:$image_tag)" ]]; then
+  if [[ -z "$(docker image ls -q --filter=reference=acrname29041983.azurecr.io/$service:$image_tag)" ]]; then
     image_tag=linux-$image_tag
   fi
 
   for service in "${services[@]}"
   do
     echo "Pushing image for service $service..."
-    docker tag "eshop/$service:$image_tag" "$container_registry/$service:$image_tag"
+    docker tag "acrname29041983.azurecr.io/$service:$image_tag" "$container_registry/$service:$image_tag"
     docker push "$container_registry/$service:$image_tag"
   done
 fi

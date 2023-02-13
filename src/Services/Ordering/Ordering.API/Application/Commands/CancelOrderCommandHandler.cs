@@ -1,48 +1,57 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+﻿using MediatR;
+using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
+using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
-// Regular CommandHandler
-public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
+namespace Ordering.API.Application.Commands
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public CancelOrderCommandHandler(IOrderRepository orderRepository)
+    // Regular CommandHandler
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
     {
-        _orderRepository = orderRepository;
-    }
+        private readonly IOrderRepository _orderRepository;
 
-    /// <summary>
-    /// Handler which processes the command when
-    /// customer executes cancel order from app
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
-    public async Task<bool> Handle(CancelOrderCommand command, CancellationToken cancellationToken)
-    {
-        var orderToUpdate = await _orderRepository.GetAsync(command.OrderNumber);
-        if (orderToUpdate == null)
+        public CancelOrderCommandHandler(IOrderRepository orderRepository)
         {
-            return false;
+            _orderRepository = orderRepository;
         }
 
-        orderToUpdate.SetCancelledStatus();
-        return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        /// <summary>
+        /// Handler which processes the command when
+        /// customer executes cancel order from app
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<bool> Handle(CancelOrderCommand command, CancellationToken cancellationToken)
+        {
+            var orderToUpdate = await _orderRepository.GetAsync(command.OrderNumber);
+            if(orderToUpdate == null)
+            {
+                return false;
+            }
+
+            orderToUpdate.SetCancelledStatus();
+            return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        }
     }
-}
 
 
-// Use for Idempotency in Command process
-public class CancelOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CancelOrderCommand, bool>
-{
-    public CancelOrderIdentifiedCommandHandler(
-        IMediator mediator,
-        IRequestManager requestManager,
-        ILogger<IdentifiedCommandHandler<CancelOrderCommand, bool>> logger)
-        : base(mediator, requestManager, logger)
+    // Use for Idempotency in Command process
+    public class CancelOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CancelOrderCommand, bool>
     {
-    }
+        public CancelOrderIdentifiedCommandHandler(
+            IMediator mediator,
+            IRequestManager requestManager,
+            ILogger<IdentifiedCommandHandler<CancelOrderCommand, bool>> logger)
+            : base(mediator, requestManager, logger)
+        {
+        }
 
-    protected override bool CreateResultForDuplicateRequest()
-    {
-        return true;                // Ignore duplicate requests for processing order.
+        protected override bool CreateResultForDuplicateRequest()
+        {
+            return true;                // Ignore duplicate requests for processing order.
+        }
     }
 }

@@ -1,10 +1,14 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.ActionResults;
-
-public class InternalServerErrorObjectResult : ObjectResult
+﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.ActionResults
 {
-    public InternalServerErrorObjectResult(object error)
-        : base(error)
+    using AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
+    public class InternalServerErrorObjectResult : ObjectResult
     {
-        StatusCode = StatusCodes.Status500InternalServerError;
+        public InternalServerErrorObjectResult(object error)
+            : base(error)
+        {
+            StatusCode = StatusCodes.Status500InternalServerError;
+        }
     }
 }

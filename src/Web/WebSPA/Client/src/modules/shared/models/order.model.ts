@@ -17,6 +17,7 @@ export interface IOrder {
     subtotal: number,
     coupon: string;
     discount: number;
+    balance:number;
     total: number;
     orderItems: IOrderItem[];
 }
