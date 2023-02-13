@@ -32,3 +32,23 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+variables:
+    registryEndpoint: eshop-rg
+trigger:
+  branches:
+    include:
+    - master
+    - dev
+  paths:
+    include:
+    - src/BuildingBlocks/*
+    - src/Services/Coupon/*
+    - k8s/helm/coupon-api/*   
+jobs:
+- template: ../buildimages.yaml
+  parameters:
+    services: coupon.api
+    registryEndpoint: $(registryEndpoint)
+    helmfrom: $(Build.SourcesDirectory)/k8s/helm
+    helmto: $(Build.ArtifactStagingDirectory)/k8s/helm
