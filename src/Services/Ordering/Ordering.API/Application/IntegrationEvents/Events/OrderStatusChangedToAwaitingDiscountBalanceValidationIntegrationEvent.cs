@@ -11,12 +11,14 @@ public record OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEv
     public string BuyerName { get; }
 
     public decimal Discount { get; set; }
+    public decimal Balance { get; set; }
 
-    public OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent(int orderId, string orderStatus, string buyerName, decimal discount)
+    public OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent(int orderId, string orderStatus, string buyerName, decimal discount, decimal balance)
     {
         OrderId = orderId;
         OrderStatus = orderStatus;
         BuyerName = buyerName;
         Discount = discount;
+        Balance = balance;
     }
 }

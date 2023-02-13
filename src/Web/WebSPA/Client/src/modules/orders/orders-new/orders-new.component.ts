@@ -34,6 +34,9 @@ export class OrdersNewComponent implements OnInit {
 
     constructor(private orderService: OrdersService, private basketService: BasketService, fb: FormBuilder, private router: Router) {
         // Obtain user profile information
+        if (this.checkedPoints == false) {
+            this.getBalance();
+        }
         this.order = orderService.mapOrderAndIdentityInfoNewOrder();
         this.newOrderForm = fb.group({
             'street': [this.order.street, Validators.required],
@@ -47,7 +50,9 @@ export class OrdersNewComponent implements OnInit {
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        
+    }
 
     keyAgreeUsePoints(event: any) {
         if(event.target.checked==true){
@@ -97,10 +102,14 @@ export class OrdersNewComponent implements OnInit {
                         let maxDiscountByPoints: number = this.order.total / 10;
                         if (this.point.cash >= maxDiscountByPoints){
                             this.discount = maxDiscountByPoints;
-                            this.balance = -(Math.round(maxDiscountByPoints * 100));
+                            // this.balance = -(Math.round(maxDiscountByPoints * 100));
+                            this.balance = Math.round(this.point.cash - this.discount + this.order.total);
+                            console.log("BALANCE: " + this.balance);
                         } else if(maxDiscountByPoints >= this.point.cash){
                             this.discount = this.point.cash;
-                            this.balance = -(Math.round(this.point.cash * 100));
+                            // this.balance = -(Math.round(this.point.cash * 100));
+                            this.balance = Math.round(this.point.cash - this.discount + this.order.total);
+                            console.log("BALANCE: " + this.balance);
                         }
                     }
                 },
@@ -114,6 +123,31 @@ export class OrdersNewComponent implements OnInit {
                 });
         
     }
+    
+    getBalance(){
+        this.orderService
+            .checkValidationPoints()
+            .subscribe(
+                point => {
+                    this.point = point;
+                    if (this.point != null){
+                        this.coupon = new class implements ICoupon {
+                            code: string;
+                            discount: number;
+                            message: string;
+                        };
+                        this.balance = this.point.cash;
+                    }
+                },
+                error => {
+                    if (error.status == 404) {
+                        this.pointValidationMessage = `${error.error}!`;
+                    } else {
+                        this.pointValidationMessage = `ERROR: ${error.status} - ${error.statusText}!`;
+                    }
+                    console.log(error);
+                });
+    }
 
     submitForm(value: any) {
         
@@ -126,25 +160,21 @@ export class OrdersNewComponent implements OnInit {
         this.order.cardholdername = this.newOrderForm.controls['cardholdername'].value;
         this.order.cardexpiration = new Date(20 + this.newOrderForm.controls['expirationdate'].value.split('/')[1], this.newOrderForm.controls['expirationdate'].value.split('/')[0]);
         this.order.cardsecuritynumber = this.newOrderForm.controls['securitycode'].value;
-        if (this.coupon && this.checkedPoints == false) {
+        if (this.coupon && this.checkedPoints == false && !this.point) {
             console.log(`Coupon: ${this.coupon.code} (${this.coupon.discount})`);
 
             this.order.coupon = this.coupon.code;
             this.order.discount = this.coupon.discount;
         }
-        else {
-            if (this.checkedPoints == true) {
-                this.order.discount = this.discount;
-            }
-            else {
-                this.discount = null
-            }
+        else if (this.coupon && this.checkedPoints == true && !this.point) {
+            this.order.discount = this.coupon.discount = this.discount;
         }
-
-        console.log(`My Balance: ${this.balance} and (${Math.round(this.order.total)})`);
-        // this.order.balance = this.balance + Math.round(this.order.total);
+        else {
+            this.discount = null
+            this.order.balance = Math.floor(this.order.total);
+        }
+        
         let basketCheckout = this.basketService.mapBasketInfoCheckout(this.order);
-        console.log("Total sum:" + this.order.total);
         this.basketService.setBasketCheckout(basketCheckout)
             .pipe(catchError((errMessage) => {
                 this.errorReceived = true;

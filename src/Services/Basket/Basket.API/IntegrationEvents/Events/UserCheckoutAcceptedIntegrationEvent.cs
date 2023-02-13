@@ -41,6 +41,7 @@ namespace Basket.API.IntegrationEvents.Events
         public string CodeDiscount { get; set; }
 
         public decimal Discount { get; set; }
+        public decimal Balance { get; set; }
 
         public UserCheckoutAcceptedIntegrationEvent(
             string userId,
@@ -59,7 +60,8 @@ namespace Basket.API.IntegrationEvents.Events
             Guid requestId,
             CustomerBasket basket,
             string codeDiscount,
-            decimal discount)
+            decimal discount,
+            decimal balance)
         {
             UserId = userId;
             UserName = userName;
@@ -78,6 +80,7 @@ namespace Basket.API.IntegrationEvents.Events
             RequestId = requestId;
             CodeDiscount = codeDiscount;
             Discount = discount;
+            Balance = balance;
         }
 
     }

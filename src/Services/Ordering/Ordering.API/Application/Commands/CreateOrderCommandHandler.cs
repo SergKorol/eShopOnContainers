@@ -55,7 +55,7 @@
                 order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, item.PictureUrl, item.Units);
             }
 
-            _logger.LogInformation("----- Creating Order - Order: {@Order}", order);
+            _logger.LogInformation("!!!!!----- Creating Order - Order: {@Order}/{@OrderBalance}", order, order.Balance.Value);
 
             _orderRepository.Add(order);
 

@@ -11,14 +11,17 @@ namespace Ordering.API.Application.Commands;
 public class DiscountBalanceConfirmedCommandHandler : IRequestHandler<DiscountBalanceConfirmedCommand, bool>
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly ILogger<DiscountBalanceConfirmedCommandHandler> _logger;
 
-    public DiscountBalanceConfirmedCommandHandler(IOrderRepository orderRepository)
+    public DiscountBalanceConfirmedCommandHandler(IOrderRepository orderRepository, ILogger<DiscountBalanceConfirmedCommandHandler> logger)
     {
         _orderRepository = orderRepository;
+        _logger = logger;
     }
 
     public async Task<bool> Handle(DiscountBalanceConfirmedCommand command, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("!!!!!----- Creating Balance - Order: {@Balance}", command.Balance);
         var orderToUpdate = await _orderRepository.GetAsync(command.OrderNumber);
 
         if (orderToUpdate == null)

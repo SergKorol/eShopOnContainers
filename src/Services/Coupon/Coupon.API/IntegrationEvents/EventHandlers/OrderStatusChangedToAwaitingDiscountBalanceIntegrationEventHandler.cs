@@ -9,7 +9,7 @@ using Serilog.Context;
 
 namespace Coupon.API.IntegrationEvents.EventHandlers;
 
-public sealed class OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent>
+public sealed class OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent>
 {
         private readonly IPointRepository _pointRepository;
         private readonly IEventBus _eventBus;
@@ -20,14 +20,12 @@ public sealed class OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventH
             _eventBus = eventBus;
         }
 
-        public async Task Handle(OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent @event)
+        public async Task Handle(OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent @event)
         {
             await Task.Delay(3000);
 
             using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-Coupon.API"))
             {
-                Log.Information("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, "Coupon.API", @event);
-
                 var pointIntegrationEvent = await ProcessIntegrationEventAsync(@event);
 
                 Log.Information("----- Publishing integration event: {IntegrationEventId} from {AppName} - ({@IntegrationEvent})", pointIntegrationEvent.Id, "Coupon.API", pointIntegrationEvent);
@@ -36,25 +34,19 @@ public sealed class OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventH
             }
         }
 
-        private async Task<IntegrationEvent> ProcessIntegrationEventAsync(OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent integrationEvent)
+        private async Task<IntegrationEvent> ProcessIntegrationEventAsync(OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent validationIntegrationEvent)
         {
-            var balance = await _pointRepository.GetPointsByUserId(integrationEvent.UserId);
-            if (balance is null)
-            {
-                balance = await _pointRepository.CreatePointsBalanceByUserId(integrationEvent.UserId);
-            }
-            Log.Information("----- Balance \"{UserId}\": {@UserId}", integrationEvent.UserId, balance);
+            var balance = await _pointRepository.GetPointsByUserId(validationIntegrationEvent.BuyerName);
 
-            if (balance.NumberOfPoints == default && integrationEvent.Balance < 0)
+            Log.Information("----- Balance {Balance}", balance);
+
+            if (balance.NumberOfPoints == default && validationIntegrationEvent.Balance <= 0)
             {
-                return new DiscountBalanceRejectedIntegrationEvent(integrationEvent.UserId, integrationEvent.Balance);
+                return new OrderDiscountBalanceRejectedIntegrationEvent(validationIntegrationEvent.OrderId, validationIntegrationEvent.Balance);
             }
             
-            Log.Information("Updated balance: {NumberOfPoints}", integrationEvent.Balance);
-
-            await _pointRepository.AddPointsToBalanceByUser(balance.Id, integrationEvent.UserId, integrationEvent.Balance);
+            await _pointRepository.AddPointsToBalanceByUser(balance.Id, validationIntegrationEvent.BuyerName, validationIntegrationEvent.Balance);
             
-            
-            return new DiscountBalanceConfirmedIntegrationEvent(integrationEvent.UserId, integrationEvent.Balance);
+            return new OrderDiscountBalanceConfirmedIntegrationEvent(validationIntegrationEvent.OrderId, validationIntegrationEvent.Balance);
         }
 }

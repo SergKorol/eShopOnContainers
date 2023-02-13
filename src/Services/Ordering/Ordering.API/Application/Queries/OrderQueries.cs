@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries
 {
     using Dapper;
     using System.Data.SqlClient;
@@ -35,6 +37,7 @@
                         o.Address_ZipCode as zipcode,
                         o.DiscountCode as coupon,
                         o.Discount as discount,
+                        o.Balance as balance,
                         os.Name as status, 
                         oi.ProductName as productname, 
                         oi.Units as units, 
@@ -110,6 +113,7 @@
                 subtotal = 0,
                 coupon = result[0].coupon,
                 discount = result[0].discount ?? 0m,
+                balance = result[0].balance ?? 0m,
                 total = 0,
             };
 

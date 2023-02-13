@@ -78,8 +78,8 @@ public class IdentifiedCommandHandlerTest
             cardHolderName: args != null && args.ContainsKey("cardHolderName") ? (string)args["cardHolderName"] : "XXX",
             cardTypeId: args != null && args.ContainsKey("cardTypeId") ? (int)args["cardTypeId"] : 0,
             codeDiscount: args != null && args.ContainsKey("codeDiscount") ? (string)args["codeDiscount"] : "DISC-5",
-            discount: args != null && args.ContainsKey("discount") ? (int)args["discount"] : 0
-            // balance: args != null && args.ContainsKey("balance") ? (int)args["balance"] : 0
+            discount: args != null && args.ContainsKey("discount") ? (int)args["discount"] : 0,
+            balance: args != null && args.ContainsKey("balance") ? (int)args["balance"] : 0
             );
     }
 }

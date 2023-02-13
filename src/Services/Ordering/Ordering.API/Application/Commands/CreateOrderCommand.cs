@@ -78,7 +78,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
 
         public CreateOrderCommand(List<BasketItem> basketItems, string userId, string userName, string city, string street, string state, string country, string zipcode,
             string cardNumber, string cardHolderName, DateTime cardExpiration,
-            string cardSecurityNumber, int cardTypeId, string codeDiscount, decimal discount) : this()
+            string cardSecurityNumber, int cardTypeId, string codeDiscount, decimal discount, decimal balance) : this()
         {
             _orderItems = basketItems.ToOrderItemsDTO().ToList();
             UserId = userId;
@@ -96,6 +96,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
             CardExpiration = cardExpiration;
             CodeDiscount = codeDiscount;
             Discount = discount;
+            Balance = balance;
         }
 
 

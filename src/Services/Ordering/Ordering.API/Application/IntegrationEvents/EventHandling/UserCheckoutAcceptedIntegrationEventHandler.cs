@@ -45,12 +45,13 @@ namespace Ordering.API.Application.IntegrationEvents.EventHandling
                 {
                     using (LogContext.PushProperty("IdentifiedCommandId", integrationEvent.RequestId))
                     {
+                        _logger.LogInformation("FUCKING BALANCE: {Balance}", integrationEvent.Balance);
                         var createOrderCommand = new CreateOrderCommand(integrationEvent.Basket.Items,
                             integrationEvent.UserId, integrationEvent.UserName, integrationEvent.City,
                             integrationEvent.Street, integrationEvent.State, integrationEvent.Country,
                             integrationEvent.ZipCode, integrationEvent.CardNumber, integrationEvent.CardHolderName,
                             integrationEvent.CardExpiration, integrationEvent.CardSecurityNumber,
-                            integrationEvent.CardTypeId, integrationEvent.CodeDiscount, integrationEvent.Discount);
+                            integrationEvent.CardTypeId, integrationEvent.CodeDiscount, integrationEvent.Discount, integrationEvent.Balance);
 
                         var requestCreateOrder = new IdentifiedCommand<CreateOrderCommand, bool>(createOrderCommand, integrationEvent.RequestId);
 

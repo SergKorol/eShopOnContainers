@@ -31,6 +31,7 @@ namespace Basket.API.Model
         public string Coupon { get; set; }
 
         public decimal Discount { get; set; }
+        public decimal Balance { get; set; }
     }
 }
 

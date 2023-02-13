@@ -19,7 +19,6 @@ export class PointsService {
 
   getPointsByUser(userId: string): Observable<IPoint> {
     let url = "http://localhost:5106" + "/api/v1/point/" + userId;
-    console.log(userId);
     
     return this.service.get(url).pipe<IPoint>(map<Response, IPoint>((response: any) => {
       return response;

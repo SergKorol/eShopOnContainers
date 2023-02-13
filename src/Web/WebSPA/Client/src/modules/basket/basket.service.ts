@@ -77,7 +77,7 @@ export class BasketService {
 
     setBasketCheckout(basketCheckout): Observable<boolean> {
         let url = this.basketUrl + '/b/api/v1/basket/checkout';
-
+        console.log("FINAL: " + basketCheckout);
         return this.service.postWithId(url, basketCheckout).pipe<boolean>(tap((response: any) => {
             this.basketWrapperService.orderCreated();
             return true;
@@ -135,7 +135,7 @@ export class BasketService {
         basketCheckout.balance = order.balance;
         basketCheckout.total = 0;
         basketCheckout.expiration = order.expiration;
-
+        console.log("My BALANCE:" + basketCheckout.balance);
         return basketCheckout;
     }
 
