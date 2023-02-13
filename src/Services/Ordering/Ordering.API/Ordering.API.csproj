@@ -82,4 +82,14 @@
     </None>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Enums" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Enums\Operation.cs" />
+  </ItemGroup>
+
 </Project>
