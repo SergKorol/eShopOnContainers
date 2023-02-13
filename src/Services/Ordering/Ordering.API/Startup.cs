@@ -143,9 +143,12 @@
             eventBus.Subscribe<OrderStockRejectedIntegrationEvent, IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>>();
             eventBus.Subscribe<OrderPaymentFailedIntegrationEvent, IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>>();
             eventBus.Subscribe<OrderPaymentSucceededIntegrationEvent, IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>>();
-
+            //coupon
             eventBus.Subscribe<OrderCouponRejectedIntegrationEvent, IIntegrationEventHandler<OrderCouponRejectedIntegrationEvent>>();
             eventBus.Subscribe<OrderCouponConfirmedIntegrationEvent, IIntegrationEventHandler<OrderCouponConfirmedIntegrationEvent>>();
+            //balance
+            eventBus.Subscribe<OrderDiscountBalanceRejectedIntegrationEvent, IIntegrationEventHandler<OrderDiscountBalanceRejectedIntegrationEvent>>();
+            eventBus.Subscribe<OrderDiscountBalanceConfirmedIntegrationEvent, IIntegrationEventHandler<OrderDiscountBalanceConfirmedIntegrationEvent>>();
         }
 
         protected virtual void ConfigureAuth(IApplicationBuilder app)

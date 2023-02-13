@@ -57,6 +57,8 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> CheckoutAsync([FromBody]BasketCheckout basketCheckout, [FromHeader(Name = "x-requestid")] string requestId)
         {
+            Console.WriteLine($"FUCK : {basketCheckout.Balance}");
+            
             var userId = _identityService.GetUserIdentity();
 
             basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
@@ -88,7 +90,8 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers
                 basketCheckout.RequestId,
                 basket,
                 basketCheckout.Coupon,
-                basketCheckout.Discount);
+                basketCheckout.Discount,
+                basketCheckout.Balance);
 
             // Once basket is checkout, sends an integration event to
             // ordering.api to convert basket to order and proceeds with

@@ -4,10 +4,8 @@ using Newtonsoft.Json;
 
 namespace Coupon.API.IntegrationEvents.Events;
 
-public sealed record OrderStatusChangedToAwaitingDiscountBalanceIntegrationEvent : IntegrationEvent
+public sealed record OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent : IntegrationEvent
 {
-    [JsonProperty]
-    public string UserId { get; set; }
     [JsonProperty]
     public int OrderId { get; private set; }
 

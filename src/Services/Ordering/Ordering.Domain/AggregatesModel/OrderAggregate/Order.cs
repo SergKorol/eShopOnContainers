@@ -71,7 +71,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.O
             Address = address;
             DiscountCode = discountCode;
             Discount = discountCode == null ? null : discount;
-            Balance = Balance == null ? 0 : balance;
+            Balance = balance == null ? 0 : balance;
 
             // Add the OrderStarterDomainEvent to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
@@ -135,27 +135,30 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.O
             // If there's no Couponm, then it's validated
             if (DiscountCode == null)
             {
-                if (Discount != null)
+                if (Balance != null)
                 {
+                    
                     if (_orderStatusId != OrderStatus.AwaitingStockValidation.Id)
                     {
                         StatusChangeException(OrderStatus.AwaitingCouponValidation);
                     }
-                    
-                    _orderStatusId = OrderStatus.AwaitingCouponValidation.Id;
+
+                    _orderStatusId = Discount != null ? OrderStatus.AwaitingCouponValidation.Id : OrderStatus.Validated.Id;
                     _description = "Validate discount balance";
                     AddDomainEvent(new OrderStatusChangedToAwaitingDiscountBalanceValidationDomainEvent(Id, Balance.Value));
                 }
-                
-                if (_orderStatusId != OrderStatus.AwaitingStockValidation.Id)
+                else
                 {
-                    StatusChangeException(OrderStatus.Validated);
+                    if (_orderStatusId != OrderStatus.AwaitingStockValidation.Id)
+                    {
+                        StatusChangeException(OrderStatus.Validated);
+                    }
+
+                    _orderStatusId = OrderStatus.Validated.Id;
+                    _description = "All the items were confirmed with available stock.";
+
+                    AddDomainEvent(new OrderStatusChangedToValidatedDomainEvent(Id));
                 }
-
-                _orderStatusId = OrderStatus.Validated.Id;
-                _description = "All the items were confirmed with available stock.";
-
-                AddDomainEvent(new OrderStatusChangedToValidatedDomainEvent(Id));
             }
             else
             {
@@ -182,20 +185,21 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.O
 
             _orderStatusId = OrderStatus.Validated.Id;
             _description = "Discount coupon validated.";
-
+            Console.WriteLine($"MY STATUS COUP: {_orderStatusId}");
             AddDomainEvent(new OrderStatusChangedToValidatedDomainEvent(Id));
         }
         
         public void ProcessDiscountBalanceConfirmed()
         {
-            if (_orderStatusId != OrderStatus.AwaitingCouponValidation.Id)
+            Console.WriteLine($"MY STATUS BAL: {_orderStatusId}");
+            if (_orderStatusId != OrderStatus.Validated.Id)
             {
-                StatusChangeException(OrderStatus.Validated);
+                StatusChangeException(OrderStatus.Paid);
             }
 
-            DiscountConfirmed = true;
+            // DiscountConfirmed = true;
 
-            _orderStatusId = OrderStatus.Validated.Id;
+            _orderStatusId = OrderStatus.Paid.Id;
             _description = "Discount balance validated.";
 
             AddDomainEvent(new OrderStatusChangedToValidatedDomainEvent(Id));

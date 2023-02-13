@@ -41,9 +41,7 @@ COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.c
 COPY "Web/WebMVC/WebMVC.csproj" "Web/WebMVC/WebMVC.csproj"
 COPY "Web/WebSPA/WebSPA.csproj" "Web/WebSPA/WebSPA.csproj"
 COPY "Web/WebStatus/WebStatus.csproj" "Web/WebStatus/WebStatus.csproj"
-
 COPY "docker-compose.dcproj" "docker-compose.dcproj"
-
 COPY "NuGet.config" "NuGet.config"
 
 RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
@@ -52,14 +50,58 @@ COPY . .
 WORKDIR /src/Services/Coupon/Coupon.API
 RUN dotnet publish --no-restore -c Release -o /app
 
-FROM build as functionaltest
-WORKDIR /src/Services/Coupon/Coupon.FunctionalTests
+#FROM build as functionaltest
+#WORKDIR /src/Services/Coupon/Coupon.FunctionalTests
 
 FROM build AS publish
-
+RUN dotnet publish --no-restore "Coupon.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 COPY --from=build /src/Services/Coupon/Coupon.API/appsettings.json .
 COPY --from=build /src/Services/Coupon/Coupon.API/appsettings.Development.json .
 ENTRYPOINT ["dotnet", "Coupon.API.dll"]
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+#FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+#WORKDIR /app
+#EXPOSE 80
+#
+#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+#WORKDIR /src
+#
+## Create this "restore-solution" section by running ./Create-DockerfileSolutionRestore.ps1, to optimize build cache reuse
+##COPY ["ApiGateways/Web.Bff.Shopping/Web.Shopping.HttpAggregator.csproj", "ApiGateways/Web.Bff.Shopping/"]
+##COPY ["BuildingBlocks/EventBus/EventBus/EventBus.csproj", "BuildingBlocks/EventBus/EventBus/"]
+##COPY ["BuildingBlocks/EventBus/EventBusRabbitMQ/EventBusRabbitMQ.csproj", "BuildingBlocks/EventBus/EventBusRabbitMQ/"]
+##COPY ["BuildingBlocks/EventBus/EventBusServiceBus/EventBusServiceBus.csproj", "BuildingBlocks/EventBus/EventBusServiceBus/"]
+##COPY ["BuildingBlocks/EventBus/IntegrationEventLogEF/IntegrationEventLogEF.csproj", "BuildingBlocks/EventBus/IntegrationEventLogEF/"]
+##COPY ["BuildingBlocks/WebHost/WebHost.Customization/WebHost.Customization.csproj", "BuildingBlocks/WebHost/WebHost.Customization/"]
+##COPY ["Services/Basket/Basket.API/Basket.API.csproj", "Services/Basket/Basket.API/"]
+##COPY ["Services/Catalog/Catalog.API/Catalog.API.csproj", "Services/Catalog/Catalog.API/"]
+##COPY ["Services/Coupon/Coupon.API/Coupon.API.csproj", "Services/Coupon/Coupon.API/"]
+##COPY ["Services/Identity/Identity.API/Identity.API.csproj", "Services/Identity/Identity.API/"]
+##COPY ["Services/Ordering/Ordering.API/Ordering.API.csproj", "Services/Ordering/Ordering.API/"]
+##COPY ["Services/Ordering/Ordering.BackgroundTasks/Ordering.BackgroundTasks.csproj", "Services/Ordering/Ordering.BackgroundTasks/"]
+##COPY ["Services/Ordering/Ordering.Domain/Ordering.Domain.csproj", "Services/Ordering/Ordering.Domain/"]
+##COPY ["Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj", "Services/Ordering/Ordering.Infrastructure/"]
+##COPY ["Services/Ordering/Ordering.SignalrHub/Ordering.SignalrHub.csproj", "Services/Ordering/Ordering.SignalrHub/"]
+##COPY ["Services/Payment/Payment.API/Payment.API.csproj", "Services/Payment/Payment.API/"]
+##COPY ["Web/WebSPA/WebSPA.csproj", "Web/WebSPA/"]
+##COPY ["Web/WebStatus/WebStatus.csproj", "Web/WebStatus/"]
+##COPY ["NuGet.config", "./"]
+##COPY ["docker-compose.dcproj", "./"]
+##COPY ["eShopOnContainers-ServicesAndWebApps.sln", "./"]
+#RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
+#
+#COPY . .
+#WORKDIR "/Services/Coupon/Coupon.API"
+## RUN dotnet build "Coupon.API.csproj" -c Release -o /app/build
+#
+#FROM build AS publish
+#RUN dotnet publish --no-restore "Coupon.API.csproj" -c Release -o /app/publish
+#
+#FROM base AS final
+#WORKDIR /app
+#COPY --from=publish /app/publish .
+#ENTRYPOINT ["dotnet", "Coupon.API.dll"]

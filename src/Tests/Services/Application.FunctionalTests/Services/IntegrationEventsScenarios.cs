@@ -51,7 +51,7 @@ public class IntegrationEventsScenarios
         }
     }
 
-    private async Task<BasketItem> GetUpdatedBasketItem(decimal newPrice, int productId, string userId, HttpClient basketClient)
+    private async Task<BasketItem> GetUpdatedBasketItem(decimal newPrice, int productId, string BuyerName, HttpClient basketClient)
     {
         bool continueLoop = true;
         var counter = 0;
@@ -60,7 +60,7 @@ public class IntegrationEventsScenarios
         while (continueLoop && counter < 20)
         {
             //get the basket and verify that the price of the modified product is updated
-            var basketGetResponse = await basketClient.GetAsync(BasketScenariosBase.Get.GetBasketByCustomer(userId));
+            var basketGetResponse = await basketClient.GetAsync(BasketScenariosBase.Get.GetBasketByCustomer(BuyerName));
             var basketUpdated = JsonSerializer.Deserialize<CustomerBasket>(await basketGetResponse.Content.ReadAsStringAsync(), new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true

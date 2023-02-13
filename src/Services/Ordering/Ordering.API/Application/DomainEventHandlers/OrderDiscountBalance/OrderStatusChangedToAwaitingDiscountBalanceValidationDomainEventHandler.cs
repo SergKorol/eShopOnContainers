@@ -33,12 +33,12 @@ public class OrderStatusChangedToAwaitingDiscountBalanceValidationDomainEventHan
     public async Task Handle(OrderStatusChangedToAwaitingDiscountBalanceValidationDomainEvent domainEvent, CancellationToken cancellationToken)
     {
         _logger.CreateLogger<OrderStatusChangedToAwaitingDiscountBalanceValidationDomainEventHandler>()
-            .LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})", domainEvent.OrderId, nameof(OrderStatus.Validated), OrderStatus.Validated.Id);
+            .LogTrace("!!!!!Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})", domainEvent.OrderId, nameof(OrderStatus.Validated), OrderStatus.Validated.Id);
 
         var order = await _orderRepository.GetAsync(domainEvent.OrderId);
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
-        var integrationEvent = new OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name, order.Discount.Value);
+        var integrationEvent = new OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name, order.Discount ?? 0, order.Balance ?? 0);
 
         await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
     }

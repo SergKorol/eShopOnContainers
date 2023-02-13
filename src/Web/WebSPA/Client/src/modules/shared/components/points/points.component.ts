@@ -32,7 +32,6 @@ export class PointsComponent implements OnInit {
               if (point != null) {
                 this.numberOfPoints = point.numberOfPoints;
                 this.cash = point.cash;
-                console.log("PTS - " + this.numberOfPoints + " " + "money - " + this.cash)
               }
             },
             error => {

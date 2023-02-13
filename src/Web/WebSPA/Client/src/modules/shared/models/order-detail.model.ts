@@ -13,6 +13,7 @@ export interface IOrderDetail {
     subtotal: number;
     coupon: string;
     discount: number;
+    balance: number;
     total: number;
     orderitems: IOrderItem[];
 }

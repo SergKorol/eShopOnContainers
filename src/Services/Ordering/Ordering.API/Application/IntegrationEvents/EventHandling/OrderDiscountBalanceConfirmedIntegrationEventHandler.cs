@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
@@ -25,7 +26,7 @@ public class OrderDiscountBalanceConfirmedIntegrationEventHandler : IIntegration
             Log.Information("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
 
             var command = new DiscountBalanceConfirmedCommand(@event.OrderId, @event.Balance);
-
+            Console.WriteLine("FUCK CONFIRM");
             Log.Information("----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
                 command.GetGenericTypeName(),
                 nameof(command.OrderNumber),

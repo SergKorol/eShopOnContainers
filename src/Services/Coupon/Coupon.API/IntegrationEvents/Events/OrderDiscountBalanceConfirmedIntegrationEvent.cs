@@ -2,8 +2,8 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 
 namespace Coupon.API.IntegrationEvents.Events;
 
-public record DiscountBalanceRejectedIntegrationEvent(string UserId, decimal Balance) : IntegrationEvent
+public record OrderDiscountBalanceConfirmedIntegrationEvent(int OrderId, decimal Balance) : IntegrationEvent
 {
-    public string UserId { get; set; } = UserId;
+    public int OrderId { get; } = OrderId;
     public decimal Balance { get; set; } = Balance;
 }

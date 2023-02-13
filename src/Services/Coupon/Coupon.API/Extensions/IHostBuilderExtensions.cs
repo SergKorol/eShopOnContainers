@@ -40,6 +40,7 @@ namespace Coupon.API.Extensions
                 var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
 
                 eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
+                eventBus.Subscribe<OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent, OrderStatusChangedToAwaitingDiscountBalanceIntegrationEventHandler>();
             }
 
             return host;

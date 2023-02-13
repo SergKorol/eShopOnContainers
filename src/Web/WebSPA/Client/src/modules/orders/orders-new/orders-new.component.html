@@ -125,7 +125,7 @@
 
             <div class="divider d-flex align-items-center justify-content-end mb-4 pt-4 text-uppercase u-text-xl">
                 <div>Total</div>
-                <div class="ml-3">${{ (coupon?.discount ? ((order.total - coupon?.discount) < 0 ? 0 : (order.total - coupon?.discount)) : order.total) | number:'.2-2'}}</div>
+                <div *ngIf="!checkedPoints" class="ml-3">${{ (coupon?.discount ? ((order.total - coupon?.discount) < 0 ? 0 : (order.total - coupon?.discount)) : order.total) | number:'.2-2'}}</div>
                 <div *ngIf="checkedPoints" class="ml-3">${{ (discount ? ((order.total - discount) < 0 ? 0 : (order.total - discount)) : order.total) | number:'.2-2'}}</div>
             </div>
 

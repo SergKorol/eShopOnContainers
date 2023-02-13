@@ -26,6 +26,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries
         public decimal total { get; set; }
         public string coupon { get; set; }
         public decimal discount { get; set; }
+        public decimal balance { get; set; }
     }
 
     public class OrderSummary

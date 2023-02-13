@@ -39,11 +39,12 @@ namespace Ordering.API.Application.IntegrationEvents.Events
         public string CodeDiscount { get; set; }
 
         public decimal Discount { get; set; }
+        public decimal Balance { get; set; }
 
         public UserCheckoutAcceptedIntegrationEvent(string userId, string userName, string city, string street,
             string state, string country, string zipCode, string cardNumber, string cardHolderName,
             DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
-            CustomerBasket basket, string codeDiscount, decimal discount)
+            CustomerBasket basket, string codeDiscount, decimal discount, decimal balance)
         {
             UserId = userId;
             City = city;
@@ -62,6 +63,7 @@ namespace Ordering.API.Application.IntegrationEvents.Events
             UserName = userName;
             CodeDiscount = codeDiscount;
             Discount = discount;
+            Balance = balance;
         }
     }
 }
