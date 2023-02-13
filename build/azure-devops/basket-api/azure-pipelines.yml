@@ -1,3 +1,14 @@
+resources:
+  repositories:
+    - repository: eShopOnContainers
+      type: github
+      name: SergKorol/eShopOnContainers
+      ref: master
+      endpoint: github.com_SergKorol
+
+
+
+
 variables:
     registryEndpoint: eshop-resource
 trigger:
