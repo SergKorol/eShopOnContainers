@@ -3,7 +3,7 @@ resources:
     - repository: eShopOnContainers
       type: github
       name: SergKorol/eShopOnContainers
-      ref: master
+      ref: dev
       endpoint: github.com_SergKorol
 
 
@@ -14,7 +14,6 @@ variables:
 trigger:
   branches:
     include:
-    - master
     - dev
   paths:
     include:
