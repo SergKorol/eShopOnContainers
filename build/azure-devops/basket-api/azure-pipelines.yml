@@ -10,7 +10,7 @@ resources:
 
 
 variables:
-    registryEndpoint: eshop-resource
+    registryEndpoint: eshop20220130011824
 trigger:
   branches:
     include:
