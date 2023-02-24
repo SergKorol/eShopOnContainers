@@ -1,19 +1,11 @@
-resources:
-  repositories:
-    - repository: eShopOnContainers
-      type: github
-      name: SergKorol/eShopOnContainers
-      ref: dev
-      endpoint: github.com_SergKorol
-
-
 
 
 variables:
-    registryEndpoint: eshop20220130011824
+    registryEndpoint: eshop-registry
 trigger:
   branches:
     include:
+    - master
     - dev
   paths:
     include:
