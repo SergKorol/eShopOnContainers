@@ -1,5 +1,9 @@
 variables:
+<<<<<<< HEAD
     registryEndpoint: eshop-resource
+=======
+    registryEndpoint: eshop20220130011824
+>>>>>>> origin/dev
 trigger:
   branches:
     include:
