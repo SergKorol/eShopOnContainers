@@ -1,7 +1,7 @@
 parameters:
   image: ''
   branch: ''
-  registry: 'eshop'
+  registry: 'eshop20220130011824'
   registryEndpoint: ''
 
 jobs:
