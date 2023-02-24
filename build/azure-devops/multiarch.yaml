@@ -1,11 +1,7 @@
 parameters:
   image: ''
   branch: ''
-<<<<<<< HEAD
   registry: 'eshop20220130011824'
-=======
-  registry: 'eshop'
->>>>>>> origin/dev
   registryEndpoint: ''
 
 jobs:
