@@ -6,11 +6,10 @@
     using Dtos;
     using Infrastructure.Models;
     using Infrastructure.Repositories;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class CouponController : ControllerBase

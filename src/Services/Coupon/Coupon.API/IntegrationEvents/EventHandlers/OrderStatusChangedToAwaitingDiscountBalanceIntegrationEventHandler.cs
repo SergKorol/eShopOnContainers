@@ -1,5 +1,3 @@
-using Coupon.API.Enums;
-using Coupon.API.Infrastructure.Repositories;
 using Coupon.API.Infrastructure.Repositories.Point;
 using Coupon.API.IntegrationEvents.Events;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;

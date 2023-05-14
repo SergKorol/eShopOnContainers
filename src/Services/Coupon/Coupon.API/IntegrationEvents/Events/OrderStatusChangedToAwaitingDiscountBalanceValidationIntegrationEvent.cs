@@ -1,4 +1,3 @@
-using Coupon.API.Enums;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 using Newtonsoft.Json;
 

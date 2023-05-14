@@ -1,8 +1,6 @@
 using System.Net;
 using Coupon.API.Dtos;
-using Coupon.API.Enums;
 using Coupon.API.Infrastructure.Models;
-using Coupon.API.Infrastructure.Repositories;
 using Coupon.API.Infrastructure.Repositories.Point;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

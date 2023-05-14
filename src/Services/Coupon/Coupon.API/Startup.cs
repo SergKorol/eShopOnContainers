@@ -1,8 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
+using Coupon.API.Controllers;
 using Coupon.API.Extensions;
 using Coupon.API.Filters;
 using Coupon.API.IntegrationEvents.EventHandlers;
 using Coupon.API.IntegrationEvents.Events;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +27,9 @@ namespace Coupon.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => options.Filters.Add<ValidateModelAttribute>());
+            services.AddControllers(options => options.Filters.Add<ValidateModelAttribute>())
+                .AddApplicationPart(typeof(CouponController).Assembly)
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
             services.AddCustomSettings(Configuration)
                 .AddCouponRegister(Configuration)
@@ -32,7 +37,7 @@ namespace Coupon.API
                 .AddAppInsight(Configuration)
                 .AddEventBus(Configuration)
                 .AddCustomAuthentication(Configuration)
-                .AddCustomAuthorization()
+                // .AddCustomAuthorization()
                 .AddSwagger(Configuration)
                 .AddCustomHealthCheck(Configuration);
 
@@ -84,17 +89,23 @@ namespace Coupon.API
                         Predicate = r => r.Name.Contains("self")
                     });
                 });
-
-            ConfigureEventBus(app);
+            ConfigureAuth(app);
+            // ConfigureEventBus(app);
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
+        
             eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>>();
             eventBus.Subscribe<OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingDiscountBalanceValidationIntegrationEvent>>();
             eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
+        }
+        
+        protected virtual void ConfigureAuth(IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

@@ -12,15 +12,13 @@ Write-Host "Tags used are linux-master, win-master, linux-dev, win-dev, linux-la
 Write-Host "Multiarch images tags will be master, dev, latest" -ForegroundColor Yellow
 
 
-$services = "identity.api", "basket.api", "catalog.api", "coupon-api", "ordering.api", "ordering.backgroundtasks", "payment.api", "webhooks.api", "ocelotapigw", "mobileshoppingagg", "webshoppingagg", "ordering.signalrhub", "webstatus", "webspa", "webmvc", "webhooks.client"
+$services = "identity.api", "basket.api", "catalog.api", "coupon.api", "ordering.api", "ordering.backgroundtasks", "payment.api", "webhooks.api", "ocelotapigw", "mobileshoppingagg", "webshoppingagg", "ordering.signalrhub", "webstatus", "webspa", "webmvc", "webhooks.client"
 
 foreach ($svc in $services) {
-    Write-Host "Creating manifest for $svc and tags :latest, :master, and :dev"
-    docker manifest create $registry/${svc}:master $registry/${svc}:linux-master $registry/${svc}:win-master
-    docker manifest create $registry/${svc}:dev $registry/${svc}:linux-dev $registry/${svc}:win-dev
-    docker manifest create $registry/${svc}:latest $registry/${svc}:linux-latest $registry/${svc}:win-latest
+    Write-Host "Creating manifest for $svc and tags :latest, :master, and :dev" -ForegroundColor Red
+    
+    docker manifest create $registry/eshop/${svc}:latest $registry/eshop/${svc}:linux-latest $registry/eshop/${svc}:win-latest
     Write-Host "Pushing manifest for $svc and tags :latest, :master, and :dev"
-    docker manifest push $registry/${svc}:latest
-    docker manifest push $registry/${svc}:dev
-    docker manifest push $registry/${svc}:master
+    docker manifest push $registry/eshop/${svc}:latest
+    
 }
